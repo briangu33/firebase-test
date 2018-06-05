@@ -1,3 +1,3 @@
-# we are mass tech 
+run `npm install` after cloning
 
-the mass tech website
+run `gulp` to build and run webserver. then go to `localhost:4000`.
