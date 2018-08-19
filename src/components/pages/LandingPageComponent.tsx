@@ -8,13 +8,13 @@ export const firebase = require("firebase");
 // Required for side-effects
 require("firebase/firestore");
 
-let config = {
-    apiKey: "AIzaSyBiSP-MkxBb9Nxwcg62Q5F_dDrEOG0lNf8",
-    authDomain: "fir-test-c5d35.firebaseapp.com",
-    databaseURL: "https://fir-test-c5d35.firebaseio.com",
-    projectId: "fir-test-c5d35",
-    storageBucket: "fir-test-c5d35.appspot.com",
-    messagingSenderId: "963950806435"
+var config = {
+    apiKey: "AIzaSyCtB2dkz32dvHJJs04utPn7fVtfD3nKObU",
+    authDomain: "wya-mit.firebaseapp.com",
+    databaseURL: "https://wya-mit.firebaseio.com",
+    projectId: "wya-mit",
+    storageBucket: "wya-mit.appspot.com",
+    messagingSenderId: "385985702046"
 };
 firebase.initializeApp(config);
 
@@ -42,7 +42,9 @@ export class LandingPageComponent extends React.Component<any, ILandingPageCompo
         });
     }
 
+
     private submitPost(content) {
+        /*
         console.log(content);
         let post: Post = {
             content: content,
@@ -59,7 +61,9 @@ export class LandingPageComponent extends React.Component<any, ILandingPageCompo
             .catch(function (error) {
                 console.error("Error setting document: ", error);
             });
+            */
     }
+
 
     private onRefreshPress() {
         this.setState({

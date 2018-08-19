@@ -27,12 +27,12 @@ exports.firebase = require("firebase");
 // Required for side-effects
 require("firebase/firestore");
 var config = {
-    apiKey: "AIzaSyBiSP-MkxBb9Nxwcg62Q5F_dDrEOG0lNf8",
-    authDomain: "fir-test-c5d35.firebaseapp.com",
-    databaseURL: "https://fir-test-c5d35.firebaseio.com",
-    projectId: "fir-test-c5d35",
-    storageBucket: "fir-test-c5d35.appspot.com",
-    messagingSenderId: "963950806435"
+    apiKey: "AIzaSyCtB2dkz32dvHJJs04utPn7fVtfD3nKObU",
+    authDomain: "wya-mit.firebaseapp.com",
+    databaseURL: "https://wya-mit.firebaseio.com",
+    projectId: "wya-mit",
+    storageBucket: "wya-mit.appspot.com",
+    messagingSenderId: "385985702046"
 };
 exports.firebase.initializeApp(config);
 // Initialize Cloud Firestore through Firebase
@@ -63,19 +63,23 @@ var LandingPageComponent = LandingPageComponent_1 = function (_React$Component) 
     _createClass(LandingPageComponent, [{
         key: "submitPost",
         value: function submitPost(content) {
+            /*
             console.log(content);
-            var post = {
+            let post: Post = {
                 content: content,
                 latitude: 47.594 + Math.random() * 0.001,
-                longitude: -122.148 + Math.random() * 0.001
+                longitude: -122.148 + Math.random() * 0.001,
             };
-            var docName = Math.random().toString(36).replace(/[^a-z]+/g, "").substr(0, 5);
-            var docRef = exports.db.collection("posts").doc(docName);
-            docRef.set(post).then(function (writeResult) {
-                console.log("Document written at: " + writeResult.writeTime);
-            }).catch(function (error) {
-                console.error("Error setting document: ", error);
-            });
+             let docName = Math.random().toString(36).replace(/[^a-z]+/g, "").substr(0, 5);
+            let docRef = db.collection("posts").doc(docName);
+            docRef.set(post)
+                .then(writeResult => {
+                    console.log(`Document written at: ${writeResult.writeTime}`);
+                })
+                .catch(function (error) {
+                    console.error("Error setting document: ", error);
+                });
+                */
         }
     }, {
         key: "onRefreshPress",

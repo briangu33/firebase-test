@@ -34,9 +34,9 @@ var MapComponent = function (_React$Component) {
 
         _this.state = {
             viewport: {
-                latitude: 47.5947,
-                longitude: -122.1502,
-                zoom: 14,
+                latitude: 37.729976,
+                longitude: -122.135260,
+                zoom: 10,
                 bearing: 0,
                 pitch: 0,
                 width: window.innerWidth / 2,
@@ -49,7 +49,7 @@ var MapComponent = function (_React$Component) {
     _createClass(MapComponent, [{
         key: "_renderPostMarker",
         value: function _renderPostMarker(post, index) {
-            return React.createElement(react_map_gl_1.Marker, { key: "marker-" + index, longitude: post.longitude, latitude: post.latitude }, React.createElement(CityPin_1.default, { size: 20, onClick: function onClick() {} }));
+            return React.createElement(react_map_gl_1.Marker, { key: "marker-" + index, longitude: post.location.longitude, latitude: post.location.latitude }, React.createElement(CityPin_1.default, { size: 20, onClick: function onClick() {} }));
         }
     }, {
         key: "render",

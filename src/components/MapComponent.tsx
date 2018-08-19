@@ -13,9 +13,9 @@ export class MapComponent extends React.Component<any, IMapComponentState> {
         super(props);
         this.state = {
             viewport: {
-                latitude: 47.5947,
-                longitude: -122.1502,
-                zoom: 14,
+                latitude: 37.729976,
+                longitude: -122.135260,
+                zoom: 10,
                 bearing: 0,
                 pitch: 0,
                 width: window.innerWidth / 2,
@@ -27,8 +27,8 @@ export class MapComponent extends React.Component<any, IMapComponentState> {
     private _renderPostMarker(post, index) {
         return (
             <Marker key={`marker-${index}`}
-                    longitude={post.longitude}
-                    latitude={post.latitude} >
+                    longitude={post.location.longitude}
+                    latitude={post.location.latitude} >
                 <CityPin size={20} onClick={() => {}} />
             </Marker>
         );

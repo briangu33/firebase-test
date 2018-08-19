@@ -13,13 +13,13 @@ const FeedComponent_1 = require("../FeedComponent");
 exports.firebase = require("firebase");
 // Required for side-effects
 require("firebase/firestore");
-let config = {
-    apiKey: "AIzaSyBiSP-MkxBb9Nxwcg62Q5F_dDrEOG0lNf8",
-    authDomain: "fir-test-c5d35.firebaseapp.com",
-    databaseURL: "https://fir-test-c5d35.firebaseio.com",
-    projectId: "fir-test-c5d35",
-    storageBucket: "fir-test-c5d35.appspot.com",
-    messagingSenderId: "963950806435"
+var config = {
+    apiKey: "AIzaSyCtB2dkz32dvHJJs04utPn7fVtfD3nKObU",
+    authDomain: "wya-mit.firebaseapp.com",
+    databaseURL: "https://wya-mit.firebaseio.com",
+    projectId: "wya-mit",
+    storageBucket: "wya-mit.appspot.com",
+    messagingSenderId: "385985702046"
 };
 exports.firebase.initializeApp(config);
 // Initialize Cloud Firestore through Firebase
@@ -41,21 +41,24 @@ let LandingPageComponent = LandingPageComponent_1 = class LandingPageComponent e
         });
     }
     submitPost(content) {
+        /*
         console.log(content);
-        let post = {
+        let post: Post = {
             content: content,
             latitude: 47.594 + Math.random() * 0.001,
             longitude: -122.148 + Math.random() * 0.001,
         };
+
         let docName = Math.random().toString(36).replace(/[^a-z]+/g, "").substr(0, 5);
-        let docRef = exports.db.collection("posts").doc(docName);
+        let docRef = db.collection("posts").doc(docName);
         docRef.set(post)
             .then(writeResult => {
-            console.log(`Document written at: ${writeResult.writeTime}`);
-        })
+                console.log(`Document written at: ${writeResult.writeTime}`);
+            })
             .catch(function (error) {
-            console.error("Error setting document: ", error);
-        });
+                console.error("Error setting document: ", error);
+            });
+            */
     }
     onRefreshPress() {
         this.setState({
