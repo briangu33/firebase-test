@@ -37,7 +37,7 @@ export class FeedComponent extends React.Component<IFeedComponentProps, IFeedCom
                     borderWidth: 3,
                 }}>
                     {rowIndex}
-                    {post.content}
+                    {post.contentText}
                 </div>
             );
         });

@@ -36,7 +36,7 @@ let FeedComponent = class FeedComponent extends React.Component {
                     borderWidth: 3,
                 } },
                 rowIndex,
-                post.content));
+                post.contentText));
         });
         return (React.createElement("div", null,
             rows,

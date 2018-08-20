@@ -3,6 +3,8 @@ import * as Radium from "radium";
 import {MapComponent} from "../MapComponent";
 import {FeedComponent} from "../FeedComponent";
 import {Post} from "../../models/Post";
+import * as fb from "firebase";
+import GeoPoint = fb.firestore.GeoPoint;
 
 export const firebase = require("firebase");
 // Required for side-effects
@@ -30,7 +32,9 @@ export class LandingPageComponent extends React.Component<any, ILandingPageCompo
         super(props);
 
         this.state = {
-            posts: []
+            posts: [],
+            onlyOnePost: false,
+            user: "any-user"
         };
 
         db.collection("posts").get().then((querySnapshot) => {
@@ -70,12 +74,28 @@ export class LandingPageComponent extends React.Component<any, ILandingPageCompo
             posts: []
         });
 
+        let posts: Post[] = [];
+
         db.collection("posts").get().then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
-                console.log(doc.data());
-                this.state.posts.push(doc.data());
-                this.setState({});
+                let post = doc.data() as Post;
+                if (post.location.latitude > this.state.swCorner.latitude && post.location.latitude < this.state.neCorner.latitude) {
+                    if (post.location.longitude > this.state.swCorner.longitude
+                        && post.location.longitude < this.state.neCorner.longitude) {
+                        posts.push(post);
+                    }
+                }
+                this.setState({
+                    posts: posts
+                });
             });
+        });
+    }
+
+    private onViewportChange(swCorner: GeoPoint, neCorner: GeoPoint) {
+        this.setState({
+            swCorner: swCorner,
+            neCorner: neCorner
         });
     }
 
@@ -97,6 +117,7 @@ export class LandingPageComponent extends React.Component<any, ILandingPageCompo
                 <div style={[LandingPageComponent.styles.mapContainer]} id={"map-container"}>
                     <MapComponent
                         posts={this.state.posts}
+                        onViewportChange={this.onViewportChange.bind(this)}
                     />
                 </div>
             </div>
@@ -122,4 +143,8 @@ export class LandingPageComponent extends React.Component<any, ILandingPageCompo
 
 export interface ILandingPageComponentState {
     posts: Post[];
+    swCorner?: GeoPoint;
+    neCorner?: GeoPoint;
+    user: string;
+    onlyOnePost: boolean;
 }

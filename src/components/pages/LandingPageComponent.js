@@ -30,7 +30,9 @@ let LandingPageComponent = LandingPageComponent_1 = class LandingPageComponent e
     constructor(props) {
         super(props);
         this.state = {
-            posts: []
+            posts: [],
+            onlyOnePost: false,
+            user: "any-user"
         };
         exports.db.collection("posts").get().then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
@@ -64,12 +66,26 @@ let LandingPageComponent = LandingPageComponent_1 = class LandingPageComponent e
         this.setState({
             posts: []
         });
+        let posts = [];
         exports.db.collection("posts").get().then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
-                console.log(doc.data());
-                this.state.posts.push(doc.data());
-                this.setState({});
+                let post = doc.data();
+                if (post.location.latitude > this.state.swCorner.latitude && post.location.latitude < this.state.neCorner.latitude) {
+                    if (post.location.longitude > this.state.swCorner.longitude
+                        && post.location.longitude < this.state.neCorner.longitude) {
+                        posts.push(post);
+                    }
+                }
+                this.setState({
+                    posts: posts
+                });
             });
+        });
+    }
+    onViewportChange(swCorner, neCorner) {
+        this.setState({
+            swCorner: swCorner,
+            neCorner: neCorner
         });
     }
     render() {
@@ -81,7 +97,7 @@ let LandingPageComponent = LandingPageComponent_1 = class LandingPageComponent e
             React.createElement("div", { style: [LandingPageComponent_1.styles.feedContainer] },
                 React.createElement(FeedComponent_1.FeedComponent, { posts: this.state.posts, onPostSubmit: this.submitPost.bind(this), onRefreshPress: this.onRefreshPress.bind(this) })),
             React.createElement("div", { style: [LandingPageComponent_1.styles.mapContainer], id: "map-container" },
-                React.createElement(MapComponent_1.MapComponent, { posts: this.state.posts }))));
+                React.createElement(MapComponent_1.MapComponent, { posts: this.state.posts, onViewportChange: this.onViewportChange.bind(this) }))));
     }
 };
 LandingPageComponent.styles = {

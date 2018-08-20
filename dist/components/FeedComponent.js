@@ -62,7 +62,7 @@ var FeedComponent = function (_React$Component) {
                         justifyContent: "flex-start",
                         height: 40,
                         borderWidth: 3
-                    } }, rowIndex, post.content);
+                    } }, rowIndex, post.contentText);
             });
             return React.createElement("div", null, rows, React.createElement("div", null, React.createElement("input", { ref: "newPostContent", type: "text", value: this.state.newContent, onChange: this.onContentChange.bind(this) }), React.createElement("input", { type: "button", value: "submit", onClick: this.onContentSubmit.bind(this) }), React.createElement("input", { type: "button", value: "refresh", onClick: this.onRefreshPress.bind(this) })));
         }

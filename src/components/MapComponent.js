@@ -10,6 +10,9 @@ const React = require("react");
 const Radium = require("radium");
 const react_map_gl_1 = require("react-map-gl");
 const CityPin_1 = require("./CityPin");
+const geo_viewport_1 = require("@mapbox/geo-viewport");
+const firebase = require("firebase");
+var GeoPoint = firebase.firestore.GeoPoint;
 const MAPBOX_TOKEN = "pk.eyJ1IjoiYmd1IiwiYSI6ImNqY2RwZ2M4bzBpOXkzM3Q5bXZ2ejAxeGwifQ.r6hjLkDS5OgPGuwIKuEGWw";
 let MapComponent = class MapComponent extends React.Component {
     constructor(props) {
@@ -26,6 +29,12 @@ let MapComponent = class MapComponent extends React.Component {
             }
         };
     }
+    onViewportChange(viewport) {
+        this.setState({ viewport });
+        let boundingBox = geo_viewport_1.bounds([this.state.viewport.longitude, this.state.viewport.latitude], this.state.viewport.zoom, [this.state.viewport.width, this.state.viewport.height], 512); // must be 512!!!
+        this.props.onViewportChange(new GeoPoint(boundingBox[1], boundingBox[0]), new GeoPoint(boundingBox[3], boundingBox[2]));
+        // some dumb ordering thing
+    }
     _renderPostMarker(post, index) {
         return (React.createElement(react_map_gl_1.Marker, { key: `marker-${index}`, longitude: post.location.longitude, latitude: post.location.latitude },
             React.createElement(CityPin_1.default, { size: 20, onClick: () => { } })));
@@ -33,7 +42,8 @@ let MapComponent = class MapComponent extends React.Component {
     render() {
         console.log(`height: ${this.state.viewport.height}`);
         console.log(`width: ${this.state.viewport.width}`);
-        return (React.createElement(react_map_gl_1.default, Object.assign({}, this.state.viewport, { onViewportChange: (viewport) => this.setState({ viewport }), mapboxApiAccessToken: MAPBOX_TOKEN }), this.props.posts.map(this._renderPostMarker.bind(this))));
+        console.log("bounding box: ", geo_viewport_1.bounds([this.state.viewport.longitude, this.state.viewport.latitude], this.state.viewport.zoom, [this.state.viewport.width, this.state.viewport.height], 512));
+        return (React.createElement(react_map_gl_1.default, Object.assign({}, this.state.viewport, { onViewportChange: this.onViewportChange.bind(this), mapboxApiAccessToken: MAPBOX_TOKEN }), this.props.posts.map(this._renderPostMarker.bind(this))));
     }
 };
 MapComponent = __decorate([

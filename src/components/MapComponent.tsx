@@ -4,6 +4,9 @@ import MapGL, {Marker, Popup, NavigationControl} from "react-map-gl";
 import {Viewport} from "../models/Viewport";
 import {Post} from "../models/Post";
 import CityPin from "./CityPin";
+import {bounds} from "@mapbox/geo-viewport";
+import * as firebase from "firebase";
+import GeoPoint = firebase.firestore.GeoPoint;
 
 const MAPBOX_TOKEN = "pk.eyJ1IjoiYmd1IiwiYSI6ImNqY2RwZ2M4bzBpOXkzM3Q5bXZ2ejAxeGwifQ.r6hjLkDS5OgPGuwIKuEGWw";
 
@@ -24,6 +27,14 @@ export class MapComponent extends React.Component<any, IMapComponentState> {
         };
     }
 
+    private onViewportChange(viewport) {
+        this.setState({viewport});
+        let boundingBox = bounds([this.state.viewport.longitude, this.state.viewport.latitude],
+            this.state.viewport.zoom, [this.state.viewport.width, this.state.viewport.height], 512); // must be 512!!!
+        this.props.onViewportChange(new GeoPoint(boundingBox[1], boundingBox[0]), new GeoPoint(boundingBox[3], boundingBox[2]));
+        // some dumb ordering thing
+    }
+
     private _renderPostMarker(post, index) {
         return (
             <Marker key={`marker-${index}`}
@@ -38,10 +49,13 @@ export class MapComponent extends React.Component<any, IMapComponentState> {
     public render() {
         console.log(`height: ${this.state.viewport.height}`);
         console.log(`width: ${this.state.viewport.width}`);
+
+        console.log("bounding box: ", bounds([this.state.viewport.longitude, this.state.viewport.latitude],
+            this.state.viewport.zoom, [this.state.viewport.width, this.state.viewport.height], 512));
         return (
             <MapGL
                 {...this.state.viewport}
-                onViewportChange={(viewport) => this.setState({viewport})}
+                onViewportChange={this.onViewportChange.bind(this)}
                 mapboxApiAccessToken={MAPBOX_TOKEN}
             >
                 { this.props.posts.map(this._renderPostMarker.bind(this)) }
@@ -53,6 +67,7 @@ export class MapComponent extends React.Component<any, IMapComponentState> {
 
 export interface IMapComponentProps {
     posts: Post[];
+    onViewportChange: any; // rip types
 }
 
 export interface IMapComponentState {

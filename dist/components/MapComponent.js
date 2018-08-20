@@ -23,6 +23,9 @@ var React = require("react");
 var Radium = require("radium");
 var react_map_gl_1 = require("react-map-gl");
 var CityPin_1 = require("./CityPin");
+var geo_viewport_1 = require("@mapbox/geo-viewport");
+var firebase = require("firebase");
+var GeoPoint = firebase.firestore.GeoPoint;
 var MAPBOX_TOKEN = "pk.eyJ1IjoiYmd1IiwiYSI6ImNqY2RwZ2M4bzBpOXkzM3Q5bXZ2ejAxeGwifQ.r6hjLkDS5OgPGuwIKuEGWw";
 var MapComponent = function (_React$Component) {
     _inherits(MapComponent, _React$Component);
@@ -47,6 +50,14 @@ var MapComponent = function (_React$Component) {
     }
 
     _createClass(MapComponent, [{
+        key: "onViewportChange",
+        value: function onViewportChange(viewport) {
+            this.setState({ viewport: viewport });
+            var boundingBox = geo_viewport_1.bounds([this.state.viewport.longitude, this.state.viewport.latitude], this.state.viewport.zoom, [this.state.viewport.width, this.state.viewport.height], 512); // must be 512!!!
+            this.props.onViewportChange(new GeoPoint(boundingBox[1], boundingBox[0]), new GeoPoint(boundingBox[3], boundingBox[2]));
+            // some dumb ordering thing
+        }
+    }, {
         key: "_renderPostMarker",
         value: function _renderPostMarker(post, index) {
             return React.createElement(react_map_gl_1.Marker, { key: "marker-" + index, longitude: post.location.longitude, latitude: post.location.latitude }, React.createElement(CityPin_1.default, { size: 20, onClick: function onClick() {} }));
@@ -54,13 +65,10 @@ var MapComponent = function (_React$Component) {
     }, {
         key: "render",
         value: function render() {
-            var _this2 = this;
-
             console.log("height: " + this.state.viewport.height);
             console.log("width: " + this.state.viewport.width);
-            return React.createElement(react_map_gl_1.default, Object.assign({}, this.state.viewport, { onViewportChange: function onViewportChange(viewport) {
-                    return _this2.setState({ viewport: viewport });
-                }, mapboxApiAccessToken: MAPBOX_TOKEN }), this.props.posts.map(this._renderPostMarker.bind(this)));
+            console.log("bounding box: ", geo_viewport_1.bounds([this.state.viewport.longitude, this.state.viewport.latitude], this.state.viewport.zoom, [this.state.viewport.width, this.state.viewport.height], 512));
+            return React.createElement(react_map_gl_1.default, Object.assign({}, this.state.viewport, { onViewportChange: this.onViewportChange.bind(this), mapboxApiAccessToken: MAPBOX_TOKEN }), this.props.posts.map(this._renderPostMarker.bind(this)));
         }
     }]);
 

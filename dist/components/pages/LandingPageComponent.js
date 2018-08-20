@@ -48,7 +48,9 @@ var LandingPageComponent = LandingPageComponent_1 = function (_React$Component) 
         var _this = _possibleConstructorReturn(this, (LandingPageComponent.__proto__ || Object.getPrototypeOf(LandingPageComponent)).call(this, props));
 
         _this.state = {
-            posts: []
+            posts: [],
+            onlyOnePost: false,
+            user: "any-user"
         };
         exports.db.collection("posts").get().then(function (querySnapshot) {
             querySnapshot.forEach(function (doc) {
@@ -89,12 +91,27 @@ var LandingPageComponent = LandingPageComponent_1 = function (_React$Component) 
             this.setState({
                 posts: []
             });
+            var posts = [];
             exports.db.collection("posts").get().then(function (querySnapshot) {
                 querySnapshot.forEach(function (doc) {
-                    console.log(doc.data());
-                    _this2.state.posts.push(doc.data());
-                    _this2.setState({});
+                    var post = doc.data();
+                    if (post.location.latitude > _this2.state.swCorner.latitude && post.location.latitude < _this2.state.neCorner.latitude) {
+                        if (post.location.longitude > _this2.state.swCorner.longitude && post.location.longitude < _this2.state.neCorner.longitude) {
+                            posts.push(post);
+                        }
+                    }
+                    _this2.setState({
+                        posts: posts
+                    });
                 });
+            });
+        }
+    }, {
+        key: "onViewportChange",
+        value: function onViewportChange(swCorner, neCorner) {
+            this.setState({
+                swCorner: swCorner,
+                neCorner: neCorner
             });
         }
     }, {
@@ -102,7 +119,7 @@ var LandingPageComponent = LandingPageComponent_1 = function (_React$Component) 
         value: function render() {
             var mapContainerElement = document.getElementById("map-container");
             console.log(mapContainerElement ? mapContainerElement.clientHeight : "none");
-            return React.createElement("div", { style: [LandingPageComponent_1.styles.container] }, React.createElement("div", { style: [LandingPageComponent_1.styles.feedContainer] }, React.createElement(FeedComponent_1.FeedComponent, { posts: this.state.posts, onPostSubmit: this.submitPost.bind(this), onRefreshPress: this.onRefreshPress.bind(this) })), React.createElement("div", { style: [LandingPageComponent_1.styles.mapContainer], id: "map-container" }, React.createElement(MapComponent_1.MapComponent, { posts: this.state.posts })));
+            return React.createElement("div", { style: [LandingPageComponent_1.styles.container] }, React.createElement("div", { style: [LandingPageComponent_1.styles.feedContainer] }, React.createElement(FeedComponent_1.FeedComponent, { posts: this.state.posts, onPostSubmit: this.submitPost.bind(this), onRefreshPress: this.onRefreshPress.bind(this) })), React.createElement("div", { style: [LandingPageComponent_1.styles.mapContainer], id: "map-container" }, React.createElement(MapComponent_1.MapComponent, { posts: this.state.posts, onViewportChange: this.onViewportChange.bind(this) })));
         }
     }]);
 
