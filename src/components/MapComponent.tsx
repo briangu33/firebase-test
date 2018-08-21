@@ -43,8 +43,12 @@ export class MapComponent extends React.Component<any, IMapComponentState> {
             <Marker key={`marker-${index}`}
                     longitude={post.location.longitude}
                     latitude={post.location.latitude}>
-                <CityPin size={20} onClick={() => {
-                }}/>
+                <CityPin
+                    size={20}
+                    onClick={() => {
+                    }}
+                    selected={this.props.selectedIndex && index === this.props.selectedIndex}
+                />
             </Marker>
         );
     }
@@ -52,15 +56,16 @@ export class MapComponent extends React.Component<any, IMapComponentState> {
     private onClick = (...args) => {
         if (this.props.isChoosingPostLocation) {
             this.props.onChoosePostLocation(args[0].lngLat);
-        };
-    }
+        }
+        ;
+    };
 
     private onHover = (...args) => {
         this.setState({
             mouseLng: args[0].lngLat[0],
             mouseLat: args[0].lngLat[1]
         });
-    }
+    };
 
 
     public render() {
@@ -92,6 +97,7 @@ export interface IMapComponentProps {
     isChoosingPostLocation: boolean;
     isWritingPost: boolean;
     onChoosePostLocation: (loc: number[]) => {};
+    selectedIndex?: number;
 }
 
 export interface IMapComponentState {

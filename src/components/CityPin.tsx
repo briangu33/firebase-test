@@ -7,17 +7,25 @@ const ICON = `M20.2,15.7L20.2,15.7c1.1-1.6,1.8-3.6,1.8-5.7c0-5.6-4.5-10-10-10S2,
 const pinStyle = {
     cursor: "pointer",
     fill: "#d00",
-    stroke: "none"
+    stroke: "none",
+    zIndex: 0
 };
+
+const pinStyleActive = {
+    cursor: "pointer",
+    fill: "#08d",
+    zIndex: 1
+}
 
 export default class CityPin extends React.PureComponent<CityPinProps, CityPinState> {
 
     public render() {
         const {size = 20, onClick} = this.props;
+        let thisStyle = this.props.selected ? pinStyleActive : pinStyle;
 
         return (
             <svg height={size} viewBox="0 0 24 24"
-                 style={{...pinStyle, transform: `translate(${-size/2}px,${-size}px)`}}
+                 style={{...thisStyle, transform: `translate(${-size/2}px,${-size}px)`}}
                  onClick={onClick} >
                 <path d={ICON}/>
             </svg>
@@ -28,6 +36,7 @@ export default class CityPin extends React.PureComponent<CityPinProps, CityPinSt
 export interface CityPinProps {
     size: number;
     onClick: () => void;
+    selected: boolean;
 }
 
 export interface CityPinState {

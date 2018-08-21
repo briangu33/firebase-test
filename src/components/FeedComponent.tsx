@@ -116,9 +116,12 @@ export class FeedComponent extends React.Component<IFeedComponentProps, IFeedCom
                 <PostTableCell
                     post={post}
                     key={rowIndex}
+                    index={rowIndex}
                     onDeletePost={this.onDeletePost}
                     onUpvotePost={this.onUpvotePost}
                     onDownvotePost={this.onDownvotePost}
+                    onHover={this.props.onHoverOverPost}
+                    onUnhover={this.props.onUnhoverOverPost}
                 />
             );
         });
@@ -182,6 +185,8 @@ export interface IFeedComponentProps {
     onTimeWindowChange: (startTime: Date, endTime: Date) => void;
     isChoosingPostLocation: boolean;
     isWritingPost: boolean;
+    onHoverOverPost: (index: number) => void;
+    onUnhoverOverPost: (index: number) => void;
 }
 
 export interface IFeedComponentState {

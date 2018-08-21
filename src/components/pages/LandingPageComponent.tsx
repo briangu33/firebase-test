@@ -108,6 +108,18 @@ export class LandingPageComponent extends React.Component<any, ILandingPageCompo
         });
     }
 
+    private onHoverOverPost = (index: number) => {
+        this.setState({
+            selectedIndex: index
+        });
+    }
+
+    private onUnhoverOverPost = (index: number) => {
+        this.setState({
+            selectedIndex: this.state.selectedIndex === index ? null : this.state.selectedIndex
+        });
+    }
+
     private isInMapRegion(post: Post) {
         return post.location.latitude > this.state.swCorner.latitude
             && post.location.latitude < this.state.neCorner.latitude
@@ -187,6 +199,8 @@ export class LandingPageComponent extends React.Component<any, ILandingPageCompo
                         onTimeWindowChange={this.onTimeWindowChange.bind(this)}
                         isChoosingPostLocation={this.state.isChoosingPostLocation}
                         isWritingPost={this.state.isWritingPost}
+                        onHoverOverPost={this.onHoverOverPost}
+                        onUnhoverOverPost={this.onUnhoverOverPost}
                     />
                 </div>
                 <div style={[LandingPageComponent.styles.mapContainer]} id={"map-container"}>
@@ -196,6 +210,7 @@ export class LandingPageComponent extends React.Component<any, ILandingPageCompo
                         isChoosingPostLocation={this.state.isChoosingPostLocation}
                         isWritingPost={this.state.isWritingPost}
                         onChoosePostLocation={this.onChoosePostLocation}
+                        selectedIndex={this.state.selectedIndex}
                     />
                 </div>
                 <div style={[LandingPageComponent.styles.addButton]}>
@@ -253,6 +268,7 @@ export interface ILandingPageComponentState {
     isChoosingPostLocation: boolean;
     isWritingPost: boolean;
     newPostLocation?: GeoPoint;
+    selectedIndex?: number;
 }
 
 export const ModalStyle = {

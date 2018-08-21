@@ -48,6 +48,7 @@ export class PostTableCell extends React.Component<IPostTableCellProps, IPostTab
             this.setState({
                 selected: true,
             });
+            this.props.onHover(this.props.index);
         }
     }
 
@@ -56,6 +57,7 @@ export class PostTableCell extends React.Component<IPostTableCellProps, IPostTab
             this.setState({
                 selected: false,
             });
+            this.props.onUnhover(this.props.index);
         }
     }
 
@@ -171,10 +173,12 @@ export class PostTableCell extends React.Component<IPostTableCellProps, IPostTab
 
 export interface IPostTableCellProps {
     post: Post;
-    key: number;
+    index: number;
     onDeletePost: (postID: string) => void;
     onUpvotePost: (postID: string) => void;
     onDownvotePost: (postID: string) => void;
+    onHover: (index: number) => void;
+    onUnhover: (index: number) => void;
 }
 
 export interface IPostTableCellState {
