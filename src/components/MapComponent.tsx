@@ -23,8 +23,11 @@ export class MapComponent extends React.Component<any, IMapComponentState> {
                 pitch: 0,
                 width: window.innerWidth / 2,
                 height: window.innerHeight
-            }
+            },
+            mouseLng: 0,
+            mouseLat: 0
         };
+
     }
 
     private onViewportChange(viewport) {
@@ -39,10 +42,24 @@ export class MapComponent extends React.Component<any, IMapComponentState> {
         return (
             <Marker key={`marker-${index}`}
                     longitude={post.location.longitude}
-                    latitude={post.location.latitude} >
-                <CityPin size={20} onClick={() => {}} />
+                    latitude={post.location.latitude}>
+                <CityPin size={20} onClick={() => {
+                }}/>
             </Marker>
         );
+    }
+
+    private onClick = (...args) => {
+        if (this.props.isAddingPost) {
+            console.log(args[0].lngLat[0], args[0].lngLat[1]); // this also disables drag maybe? unclear
+        }
+    };
+
+    private onHover = (...args) => {
+        this.setState({
+            mouseLng: args[0].lngLat[0],
+            mouseLat: args[0].lngLat[1]
+        });
     }
 
 
@@ -53,13 +70,21 @@ export class MapComponent extends React.Component<any, IMapComponentState> {
         console.log("bounding box: ", bounds([this.state.viewport.longitude, this.state.viewport.latitude],
             this.state.viewport.zoom, [this.state.viewport.width, this.state.viewport.height], 512));
         return (
-            <MapGL
-                {...this.state.viewport}
-                onViewportChange={this.onViewportChange.bind(this)}
-                mapboxApiAccessToken={MAPBOX_TOKEN}
-            >
-                { this.props.posts.map(this._renderPostMarker.bind(this)) }
-            </MapGL>
+            <div>
+                <pre id="info">
+                    {"long: " + this.state.mouseLng + ", lat: " + this.state.mouseLat}
+                </pre>
+                <MapGL
+                    {...this.state.viewport}
+                    onViewportChange={this.onViewportChange.bind(this)}
+                    mapboxApiAccessToken={MAPBOX_TOKEN}
+                    onClick={this.onClick}
+                    onHover={this.onHover}
+                    dragPan={!this.props.isAddingPost}
+                >
+                    {this.props.posts.map(this._renderPostMarker.bind(this))}
+                </MapGL>
+            </div>
         );
     }
 
@@ -68,8 +93,11 @@ export class MapComponent extends React.Component<any, IMapComponentState> {
 export interface IMapComponentProps {
     posts: Post[];
     onViewportChange: any; // rip types
+    isAddingPost: boolean;
 }
 
 export interface IMapComponentState {
     viewport: Viewport;
+    mouseLng: number;
+    mouseLat: number;
 }

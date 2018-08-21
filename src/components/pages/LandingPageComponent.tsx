@@ -28,6 +28,7 @@ db.settings(settings);
 
 @Radium
 export class LandingPageComponent extends React.Component<any, ILandingPageComponentState> {
+
     constructor(props) {
         super(props);
 
@@ -38,7 +39,8 @@ export class LandingPageComponent extends React.Component<any, ILandingPageCompo
             neCorner: new GeoPoint(90, 180),
             startTime: new Date("August 1, 2018 00:00:00"),
             endTime: new Date(),
-            user: "any-user"
+            user: "any-user",
+            isAddingPost: false,
         };
 
         db.collection("posts").get().then((querySnapshot) => {
@@ -48,6 +50,25 @@ export class LandingPageComponent extends React.Component<any, ILandingPageCompo
                 this.setState({});
             });
         });
+    }
+
+    public componentDidMount() {
+        document.addEventListener("keydown", this._onKeyDown);
+    }
+
+    public componentWillUnmount() {
+        document.removeEventListener("keydown", this._onKeyDown);
+    }
+
+    private _onKeyDown = (event) => {
+        const keyName = event.key;
+        console.log(keyName.toString());
+        if (keyName === "Escape" && this.state.isAddingPost) {
+            console.log("cancelling");
+            this.setState({
+                isAddingPost: false
+            });
+        }
     }
 
 
@@ -120,6 +141,12 @@ export class LandingPageComponent extends React.Component<any, ILandingPageCompo
         });
     }
 
+    private onClickAdd = () => {
+        this.setState({
+            isAddingPost: !this.state.isAddingPost
+        });
+    }
+
     public render() {
         let mapContainerElement = document.getElementById("map-container");
         console.log(mapContainerElement ? mapContainerElement.clientHeight : "none");
@@ -136,13 +163,22 @@ export class LandingPageComponent extends React.Component<any, ILandingPageCompo
                         onPostSubmit={this.submitPost.bind(this)}
                         onRefreshPress={this.onRefreshPress.bind(this)}
                         onTimeWindowChange={this.onTimeWindowChange.bind(this)}
+                        isAddingPost={this.state.isAddingPost}
                     />
                 </div>
                 <div style={[LandingPageComponent.styles.mapContainer]} id={"map-container"}>
                     <MapComponent
                         posts={this.state.posts}
                         onViewportChange={this.onViewportChange.bind(this)}
+                        isAddingPost={this.state.isAddingPost}
                     />
+                </div>
+                <div style={[LandingPageComponent.styles.addButton]}>
+                    <button
+                        onClick={this.onClickAdd}
+                    >
+                        {this.state.isAddingPost ? "cancel" : "add post"}
+                    </button>
                 </div>
             </div>
         );
@@ -161,6 +197,11 @@ export class LandingPageComponent extends React.Component<any, ILandingPageCompo
         feedContainer: {
             flex: 1,
             height: "100%"
+        },
+        addButton: {
+            position: "absolute",
+            right: 10,
+            top: 10
         }
     };
 }
@@ -173,4 +214,5 @@ export interface ILandingPageComponentState {
     endTime?: Date;
     user: string;
     onlyOnePost: boolean;
+    isAddingPost: boolean;
 }
