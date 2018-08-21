@@ -112,13 +112,13 @@ export class LandingPageComponent extends React.Component<any, ILandingPageCompo
         this.setState({
             selectedIndex: index
         });
-    }
+    };
 
     private onUnhoverOverPost = (index: number) => {
         this.setState({
             selectedIndex: this.state.selectedIndex === index ? null : this.state.selectedIndex
         });
-    }
+    };
 
     private isInMapRegion(post: Post) {
         return post.location.latitude > this.state.swCorner.latitude
@@ -170,7 +170,9 @@ export class LandingPageComponent extends React.Component<any, ILandingPageCompo
                     isWritingPost: false,
                     newPostLocation: null,
                     endTime: new Date(Date.now() + 5000)
-                }, () => { this.refresh(); });
+                }, () => {
+                    this.refresh();
+                });
             });
     };
 
@@ -179,6 +181,12 @@ export class LandingPageComponent extends React.Component<any, ILandingPageCompo
             isChoosingPostLocation: false,
             isWritingPost: false,
             newPostLocation: null
+        });
+    };
+
+    private onClickMapMarker = (index: number) => {
+        this.setState({
+            selectedIndex: index
         });
     };
 
@@ -201,6 +209,7 @@ export class LandingPageComponent extends React.Component<any, ILandingPageCompo
                         isWritingPost={this.state.isWritingPost}
                         onHoverOverPost={this.onHoverOverPost}
                         onUnhoverOverPost={this.onUnhoverOverPost}
+                        selectedIndex={this.state.selectedIndex}
                     />
                 </div>
                 <div style={[LandingPageComponent.styles.mapContainer]} id={"map-container"}>
@@ -211,6 +220,7 @@ export class LandingPageComponent extends React.Component<any, ILandingPageCompo
                         isWritingPost={this.state.isWritingPost}
                         onChoosePostLocation={this.onChoosePostLocation}
                         selectedIndex={this.state.selectedIndex}
+                        onClickMapMarker={this.onClickMapMarker}
                     />
                 </div>
                 <div style={[LandingPageComponent.styles.addButton]}>

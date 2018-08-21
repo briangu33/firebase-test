@@ -13,10 +13,9 @@ export class PostTableCell extends React.Component<IPostTableCellProps, IPostTab
         super(props);
 
         this.state = {
-            selected: false,
             upvotes: 0,
             downvotes: 0,
-            comments: 0
+            comments: 0,
         };
 
         db.collection("posts").doc(this.props.post.documentID).collection("upvotes")
@@ -45,18 +44,12 @@ export class PostTableCell extends React.Component<IPostTableCellProps, IPostTab
 
     private onHoverStart = () => {
         if (this._isMounted) {
-            this.setState({
-                selected: true,
-            });
             this.props.onHover(this.props.index);
         }
     }
 
     private onHoverEnd = () => {
         if (this._isMounted) {
-            this.setState({
-                selected: false,
-            });
             this.props.onUnhover(this.props.index);
         }
     }
@@ -82,7 +75,7 @@ export class PostTableCell extends React.Component<IPostTableCellProps, IPostTab
             <div
                 onMouseEnter={this.onHoverStart}
                 onMouseLeave={this.onHoverEnd}
-                style={[PostTableCell.styles.container, { backgroundColor: this.state.selected ? "#cccccc" : "#ffffff" }]}
+                style={[PostTableCell.styles.container, { backgroundColor: this.props.isSelected ? "#cccccc" : "#ffffff" }]}
             >
                 <div style={[PostTableCell.styles.topBar]}>
                     <div>
@@ -179,10 +172,10 @@ export interface IPostTableCellProps {
     onDownvotePost: (postID: string) => void;
     onHover: (index: number) => void;
     onUnhover: (index: number) => void;
+    isSelected: boolean;
 }
 
 export interface IPostTableCellState {
-    selected: boolean;
     upvotes: number;
     downvotes: number;
     comments: number;

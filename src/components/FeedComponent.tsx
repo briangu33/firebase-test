@@ -122,6 +122,7 @@ export class FeedComponent extends React.Component<IFeedComponentProps, IFeedCom
                     onDownvotePost={this.onDownvotePost}
                     onHover={this.props.onHoverOverPost}
                     onUnhover={this.props.onUnhoverOverPost}
+                    isSelected={this.props.selectedIndex && this.props.selectedIndex === rowIndex}
                 />
             );
         });
@@ -187,6 +188,7 @@ export interface IFeedComponentProps {
     isWritingPost: boolean;
     onHoverOverPost: (index: number) => void;
     onUnhoverOverPost: (index: number) => void;
+    selectedIndex: number;
 }
 
 export interface IFeedComponentState {

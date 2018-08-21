@@ -19,6 +19,10 @@ const pinStyleActive = {
 
 export default class CityPin extends React.PureComponent<CityPinProps, CityPinState> {
 
+    private onClick = () => {
+        this.props.onClick(this.props.index);
+    }
+
     public render() {
         const {size = 20, onClick} = this.props;
         let thisStyle = this.props.selected ? pinStyleActive : pinStyle;
@@ -26,7 +30,7 @@ export default class CityPin extends React.PureComponent<CityPinProps, CityPinSt
         return (
             <svg height={size} viewBox="0 0 24 24"
                  style={{...thisStyle, transform: `translate(${-size/2}px,${-size}px)`}}
-                 onClick={onClick} >
+                 onClick={this.onClick} >
                 <path d={ICON}/>
             </svg>
         );
@@ -35,8 +39,9 @@ export default class CityPin extends React.PureComponent<CityPinProps, CityPinSt
 
 export interface CityPinProps {
     size: number;
-    onClick: () => void;
+    onClick: (index: number) => void;
     selected: boolean;
+    index: number;
 }
 
 export interface CityPinState {
