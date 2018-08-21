@@ -2,19 +2,46 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="761a1100-6d37-4b38-906c-b36ef7cec7b1" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/components/PostTableCell.tsx" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/data/db/prod_db" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/flootify.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/notes.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/components/CityPin.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/components/FeedComponent.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/components/MapComponent.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/components/PostTableCell.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/components/pages/AboutPageComponent.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/components/pages/AboutPageComponent.jsx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/components/pages/AboutPageComponent.tsx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/components/pages/AutoComposePageComponent.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/components/pages/AutoComposePageComponent.jsx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/components/pages/AutoComposePageComponent.tsx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/components/pages/ErrorPageComponent.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/components/pages/ErrorPageComponent.jsx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/components/pages/ErrorPageComponent.tsx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/components/pages/LandingPageComponent.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/components/pages/LandingPageComponent.jsx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/models/IInitializationState.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/models/Post.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/models/Viewport.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/server/ApiController.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/server/Env.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/server/ErrorMiddleware.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/server/ErrorMiddleware.ts" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/server/IDataLayer.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/server/IDataLayer.ts" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/server/InMemoryDataLayer.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/server/InMemoryDataLayer.ts" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/server/PostgreSQLDataLayer.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/server/PostgreSQLDataLayer.ts" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/server/ReactPageRenderMiddleware.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/server/SQLiteDataLayer.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/server/SQLiteDataLayer.ts" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/server/Server.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/ui/App.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/ui/App.jsx" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/mass-tech.iml" afterPath="$PROJECT_DIR$/.idea/mass-tech.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/typescript-compiler.xml" afterPath="$PROJECT_DIR$/.idea/typescript-compiler.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist/bundle/bundle.js" afterPath="$PROJECT_DIR$/dist/bundle/bundle.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist/components/FeedComponent.js" afterPath="$PROJECT_DIR$/dist/components/FeedComponent.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist/components/pages/LandingPageComponent.js" afterPath="$PROJECT_DIR$/dist/components/pages/LandingPageComponent.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist/ui/App.js" afterPath="$PROJECT_DIR$/dist/ui/App.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gulpfile.js" afterPath="$PROJECT_DIR$/gulpfile.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/components/FeedComponent.js" afterPath="$PROJECT_DIR$/src/components/FeedComponent.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/components/FeedComponent.tsx" afterPath="$PROJECT_DIR$/src/components/FeedComponent.tsx" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/components/pages/LandingPageComponent.js" afterPath="$PROJECT_DIR$/src/components/pages/LandingPageComponent.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/components/pages/LandingPageComponent.tsx" afterPath="$PROJECT_DIR$/src/components/pages/LandingPageComponent.tsx" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ui/App.js" afterPath="$PROJECT_DIR$/src/ui/App.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ui/App.tsx" afterPath="$PROJECT_DIR$/src/ui/App.tsx" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -25,6 +52,16 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="Server.ts" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/server/Server.ts">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="8" column="46" lean-forward="false" selection-start-line="8" selection-start-column="46" selection-end-line="8" selection-end-column="46" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="App.tsx" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/ui/App.tsx">
           <provider selected="true" editor-type-id="text-editor">
@@ -71,10 +108,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="PostTableCell.tsx" pinned="false" current-in-tab="true">
+      <file leaf-file-name="PostTableCell.tsx" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/components/PostTableCell.tsx">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-227">
+            <state relative-caret-position="15">
               <caret line="29" column="12" lean-forward="false" selection-start-line="29" selection-start-column="12" selection-end-line="29" selection-end-column="12" />
               <folding>
                 <element signature="e#0#31#0" expanded="true" />
@@ -132,7 +169,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/server/IDataLayer.ts" />
         <option value="$PROJECT_DIR$/src/components/pages/AutoComposePageComponent.tsx" />
         <option value="$PROJECT_DIR$/tslint.json" />
         <option value="$PROJECT_DIR$/src/models/IInitializationState.ts" />
@@ -160,6 +196,7 @@
         <option value="$PROJECT_DIR$/src/components/pages/LandingPageComponent.tsx" />
         <option value="$PROJECT_DIR$/src/components/FeedComponent.tsx" />
         <option value="$PROJECT_DIR$/src/components/PostTableCell.tsx" />
+        <option value="$PROJECT_DIR$/src/server/IDataLayer.ts" />
       </list>
     </option>
   </component>
@@ -203,6 +240,11 @@
             <path>
               <item name="firebase-test" type="b2602c69:ProjectViewProjectNode" />
               <item name="firebase-test" type="462c0819:PsiDirectoryNode" />
+              <item name="scripts" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="firebase-test" type="b2602c69:ProjectViewProjectNode" />
+              <item name="firebase-test" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -222,29 +264,13 @@
               <item name="firebase-test" type="b2602c69:ProjectViewProjectNode" />
               <item name="firebase-test" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="components" type="462c0819:PsiDirectoryNode" />
-              <item name="pages" type="462c0819:PsiDirectoryNode" />
-              <item name="ErrorPageComponent.tsx" type="620a8d5e:NestingTreeNode" />
-            </path>
-            <path>
-              <item name="firebase-test" type="b2602c69:ProjectViewProjectNode" />
-              <item name="firebase-test" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="models" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="firebase-test" type="b2602c69:ProjectViewProjectNode" />
               <item name="firebase-test" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="models" type="462c0819:PsiDirectoryNode" />
-              <item name="IInitializationState.ts" type="620a8d5e:NestingTreeNode" />
-            </path>
-            <path>
-              <item name="firebase-test" type="b2602c69:ProjectViewProjectNode" />
-              <item name="firebase-test" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="models" type="462c0819:PsiDirectoryNode" />
-              <item name="Post.ts" type="620a8d5e:NestingTreeNode" />
+              <item name="server" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="firebase-test" type="b2602c69:ProjectViewProjectNode" />
@@ -284,6 +310,7 @@
     <property name="settings.editor.selected.configurable" value="settings.typescriptcompiler" />
     <property name="HbShouldOpenHtmlAsHb" value="" />
     <property name="nodejs_interpreter_path" value="$USER_HOME$/.nvm/versions/node/v7.7.1/bin/node" />
+    <property name="typescript-compiler-editor-notification" value="false" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -410,14 +437,13 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="66535000" />
+    <option name="totallyTimeSpent" value="66990000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="20" y="23" width="1410" height="827" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info id="TypeScript" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19787234" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19787234" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32976446" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -447,15 +473,6 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
-    <option name="exactExcludedFiles">
-      <list>
-        <option value="$PROJECT_DIR$/src/models/Viewport.js" />
-        <option value="$PROJECT_DIR$/src/components/FeedComponent.js" />
-        <option value="$PROJECT_DIR$/src/models/Post.js" />
-        <option value="$PROJECT_DIR$/src/components/CityPin.js" />
-        <option value="$PROJECT_DIR$/src/components/PostTableCell.js" />
-      </list>
-    </option>
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
@@ -467,14 +484,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/server/ComposerTokenLoader.ts" />
-    <entry file="file://$PROJECT_DIR$/tsconfig.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="12" column="1" lean-forward="false" selection-start-line="12" selection-start-column="1" selection-end-line="12" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/components/pages/LandingPageComponent.jsx" />
     <entry file="file://$PROJECT_DIR$/src/components/pages/LandingPageComponent.js" />
     <entry file="file://$PROJECT_DIR$/tslint.json">
@@ -491,31 +500,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/models/IInitializationState.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="6" column="6" lean-forward="false" selection-start-line="6" selection-start-column="6" selection-end-line="6" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/server/Env.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/ErrorMiddleware.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/IDataLayer.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="2" column="3" lean-forward="false" selection-start-line="2" selection-start-column="3" selection-end-line="2" selection-end-column="3" />
         </state>
       </provider>
     </entry>
@@ -536,21 +524,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/InMemoryDataLayer.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/server/PostgreSQLDataLayer.ts" />
-    <entry file="file://$PROJECT_DIR$/src/server/ApiController.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="3" column="13" lean-forward="false" selection-start-line="3" selection-start-column="13" selection-end-line="3" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/components/pages/RecorderPlayerPageComponent.tsx" />
     <entry file="file://$PROJECT_DIR$/src/components/pages/AboutPageComponent.tsx">
       <provider selected="true" editor-type-id="text-editor">
@@ -596,13 +570,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/models/Viewport.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="7" column="28" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="8" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/firebase.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -620,16 +587,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/components/pages/RecorderPlayerPageComponent.jsx" />
-    <entry file="file://$PROJECT_DIR$/src/server/Server.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="78">
-          <caret line="8" column="46" lean-forward="false" selection-start-line="8" selection-start-column="46" selection-end-line="8" selection-end-column="46" />
-          <folding>
-            <element signature="e#0#35#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/views/index.hbs">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="416">
@@ -712,16 +669,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/ui/App.tsx">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" column="0" lean-forward="false" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#31#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/components/PostTableCell.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="270">
@@ -774,13 +721,95 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/models/Viewport.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="8" column="1" lean-forward="true" selection-start-line="8" selection-start-column="1" selection-end-line="8" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ui/App.tsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="10" column="0" lean-forward="false" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#31#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/models/IInitializationState.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" column="6" lean-forward="false" selection-start-line="6" selection-start-column="6" selection-end-line="6" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/ApiController.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="3" column="13" lean-forward="false" selection-start-line="3" selection-start-column="13" selection-end-line="3" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/Env.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/components/PostTableCell.tsx">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-227">
+        <state relative-caret-position="15">
           <caret line="29" column="12" lean-forward="false" selection-start-line="29" selection-start-column="12" selection-end-line="29" selection-end-column="12" />
           <folding>
             <element signature="e#0#31#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/ErrorMiddleware.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/IDataLayer.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="2" lean-forward="false" selection-start-line="2" selection-start-column="2" selection-end-line="2" selection-end-column="2" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/InMemoryDataLayer.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/InMemoryDataLayer.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/Server.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="8" column="46" lean-forward="false" selection-start-line="8" selection-start-column="46" selection-end-line="8" selection-end-column="46" />
+          <folding />
         </state>
       </provider>
     </entry>
