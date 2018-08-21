@@ -5,6 +5,9 @@ import {FeedComponent} from "../FeedComponent";
 import {Post} from "../../models/Post";
 import * as fb from "firebase";
 import GeoPoint = fb.firestore.GeoPoint;
+import {NewPostModal} from "../NewPostModal";
+import * as ReactModal from "react-modal";
+import {PostSubmission} from "../../models/PostSubmission";
 
 export const firebase = require("firebase");
 // Required for side-effects
@@ -40,7 +43,8 @@ export class LandingPageComponent extends React.Component<any, ILandingPageCompo
             startTime: new Date("August 1, 2018 00:00:00"),
             endTime: new Date(),
             user: "any-user",
-            isAddingPost: false,
+            isChoosingPostLocation: false,
+            isWritingPost: false
         };
 
         db.collection("posts").get().then((querySnapshot) => {
@@ -63,13 +67,13 @@ export class LandingPageComponent extends React.Component<any, ILandingPageCompo
     private _onKeyDown = (event) => {
         const keyName = event.key;
         console.log(keyName.toString());
-        if (keyName === "Escape" && this.state.isAddingPost) {
+        if (keyName === "Escape" && this.state.isChoosingPostLocation) {
             console.log("cancelling");
             this.setState({
-                isAddingPost: false
+                isChoosingPostLocation: false
             });
         }
-    }
+    };
 
 
     private submitPost(content) {
@@ -93,8 +97,7 @@ export class LandingPageComponent extends React.Component<any, ILandingPageCompo
             */
     }
 
-
-    private onRefreshPress() {
+    private refresh() {
         this.setState({
             posts: []
         });
@@ -113,6 +116,11 @@ export class LandingPageComponent extends React.Component<any, ILandingPageCompo
                     });
                 });
             });
+    }
+
+
+    private onRefreshPress() {
+        this.refresh();
     }
 
     private onTimeWindowChange(startTime = new Date("August 1, 2018 00:00:00"), endTime = new Date()) {
@@ -143,9 +151,46 @@ export class LandingPageComponent extends React.Component<any, ILandingPageCompo
 
     private onClickAdd = () => {
         this.setState({
-            isAddingPost: !this.state.isAddingPost
+            isChoosingPostLocation: !this.state.isChoosingPostLocation
         });
-    }
+    };
+
+    private onChoosePostLocation = (loc: number[]) => {
+        this.setState({
+            isChoosingPostLocation: false,
+            isWritingPost: true,
+            newPostLocation: new GeoPoint(loc[1], loc[0])
+        });
+    };
+
+    private onSubmitNewPost = (submission: PostSubmission) => {
+        let newPostRef = db.collection("posts").doc();
+        newPostRef.set({
+            documentID: newPostRef.id,
+            contentText: submission.contentText,
+            location: submission.location,
+            timestamp: firebase.firestore.Timestamp.now(),
+            user: submission.user,
+            visibleUsername: submission.visibleUsername
+        })
+            .then((docRef) => {
+                console.log("posted");
+                this.setState({
+                    isChoosingPostLocation: false,
+                    isWritingPost: false,
+                    newPostLocation: null,
+                    endTime: new Date(Date.now() + 5000)
+                }, () => { this.refresh(); });
+            });
+    };
+
+    private onCancelWritingPost = () => {
+        this.setState({
+            isChoosingPostLocation: false,
+            isWritingPost: false,
+            newPostLocation: null
+        });
+    };
 
     public render() {
         let mapContainerElement = document.getElementById("map-container");
@@ -163,23 +208,37 @@ export class LandingPageComponent extends React.Component<any, ILandingPageCompo
                         onPostSubmit={this.submitPost.bind(this)}
                         onRefreshPress={this.onRefreshPress.bind(this)}
                         onTimeWindowChange={this.onTimeWindowChange.bind(this)}
-                        isAddingPost={this.state.isAddingPost}
+                        isChoosingPostLocation={this.state.isChoosingPostLocation}
+                        isWritingPost={this.state.isWritingPost}
                     />
                 </div>
                 <div style={[LandingPageComponent.styles.mapContainer]} id={"map-container"}>
                     <MapComponent
                         posts={this.state.posts}
                         onViewportChange={this.onViewportChange.bind(this)}
-                        isAddingPost={this.state.isAddingPost}
+                        isChoosingPostLocation={this.state.isChoosingPostLocation}
+                        isWritingPost={this.state.isWritingPost}
+                        onChoosePostLocation={this.onChoosePostLocation}
                     />
                 </div>
                 <div style={[LandingPageComponent.styles.addButton]}>
                     <button
                         onClick={this.onClickAdd}
                     >
-                        {this.state.isAddingPost ? "cancel" : "add post"}
+                        {this.state.isChoosingPostLocation ? "cancel" : "add post"}
                     </button>
                 </div>
+                <ReactModal
+                    isOpen={this.state.isWritingPost}
+                    style={ModalStyle}
+                    contentLabel="New Post"
+                    onRequestClose={this.onCancelWritingPost}>
+                    <NewPostModal
+                        onSubmit={this.onSubmitNewPost}
+                        onCancel={this.onCancelWritingPost}
+                        location={this.state.newPostLocation}
+                    />
+                </ReactModal>
             </div>
         );
     }
@@ -214,5 +273,49 @@ export interface ILandingPageComponentState {
     endTime?: Date;
     user: string;
     onlyOnePost: boolean;
-    isAddingPost: boolean;
+    isChoosingPostLocation: boolean;
+    isWritingPost: boolean;
+    newPostLocation?: GeoPoint;
 }
+
+export const ModalStyle = {
+    overlay: {
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100vw",
+        height: "100vh",
+        backgroundColor: "rgba(255, 255, 255, 0.75)",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center"
+
+    },
+    content: {
+        position: "relative",
+        background: "#fff",
+        overflow: "auto",
+        WebkitOverflowScrolling: "touch",
+        borderRadius: "0px",
+        outline: "none",
+        padding: "20px",
+        boxSizing: "border-box",
+        color: "rgba(0, 0, 0, 0.87)",
+        direction: "ltr",
+        display: "block",
+        fontSize: "14px",
+        lineHeight: "20px",
+        overflowX: "hidden",
+        overflowY: "auto",
+        paddingBottom: "36px",
+        paddingLeft: "40px",
+        paddingRight: "40px",
+        paddingTop: "48px",
+        transitionDelay: "0s",
+        transitionDuration: "0.2s",
+        transitionProperty: "all",
+        transitionTimingFunction: "ease",
+        width: "475px",
+        "boxShadow": "0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2)"
+    }
+};

@@ -165,7 +165,8 @@ export interface IFeedComponentProps {
     onPostSubmit: (string) => void;
     onRefreshPress: () => void;
     onTimeWindowChange: (startTime: Date, endTime: Date) => void;
-    isAddingPost: boolean;
+    isChoosingPostLocation: boolean;
+    isWritingPost: boolean;
 }
 
 export interface IFeedComponentState {

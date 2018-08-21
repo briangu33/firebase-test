@@ -6,6 +6,9 @@ import {db} from "./pages/LandingPageComponent";
 
 @Radium
 export class PostTableCell extends React.Component<IPostTableCellProps, IPostTableCellState> {
+
+    private _isMounted = false;
+
     constructor(props) {
         super(props);
 
@@ -32,16 +35,28 @@ export class PostTableCell extends React.Component<IPostTableCellProps, IPostTab
             });
     }
 
+    public componentDidMount() {
+        this._isMounted = true;
+    }
+
+    public componentWillUnmount() {
+        this._isMounted = false;
+    }
+
     private onHoverStart = () => {
-        this.setState({
-            selected: true,
-        });
+        if (this._isMounted) {
+            this.setState({
+                selected: true,
+            });
+        }
     }
 
     private onHoverEnd = () => {
-        this.setState({
-            selected: false,
-        });
+        if (this._isMounted) {
+            this.setState({
+                selected: false,
+            });
+        }
     }
 
     private onDeleteClick = () => {

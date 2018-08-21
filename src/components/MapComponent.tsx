@@ -18,7 +18,7 @@ export class MapComponent extends React.Component<any, IMapComponentState> {
             viewport: {
                 latitude: 37.729976,
                 longitude: -122.135260,
-                zoom: 10,
+                zoom: 13,
                 bearing: 0,
                 pitch: 0,
                 width: window.innerWidth / 2,
@@ -50,10 +50,10 @@ export class MapComponent extends React.Component<any, IMapComponentState> {
     }
 
     private onClick = (...args) => {
-        if (this.props.isAddingPost) {
-            console.log(args[0].lngLat[0], args[0].lngLat[1]); // this also disables drag maybe? unclear
-        }
-    };
+        if (this.props.isChoosingPostLocation) {
+            this.props.onChoosePostLocation(args[0].lngLat);
+        };
+    }
 
     private onHover = (...args) => {
         this.setState({
@@ -64,11 +64,6 @@ export class MapComponent extends React.Component<any, IMapComponentState> {
 
 
     public render() {
-        console.log(`height: ${this.state.viewport.height}`);
-        console.log(`width: ${this.state.viewport.width}`);
-
-        console.log("bounding box: ", bounds([this.state.viewport.longitude, this.state.viewport.latitude],
-            this.state.viewport.zoom, [this.state.viewport.width, this.state.viewport.height], 512));
         return (
             <div>
                 <pre id="info">
@@ -80,7 +75,8 @@ export class MapComponent extends React.Component<any, IMapComponentState> {
                     mapboxApiAccessToken={MAPBOX_TOKEN}
                     onClick={this.onClick}
                     onHover={this.onHover}
-                    dragPan={!this.props.isAddingPost}
+                    dragPan={!this.props.isChoosingPostLocation}
+                    doubleClickZoom={!this.props.isChoosingPostLocation}
                 >
                     {this.props.posts.map(this._renderPostMarker.bind(this))}
                 </MapGL>
@@ -93,7 +89,9 @@ export class MapComponent extends React.Component<any, IMapComponentState> {
 export interface IMapComponentProps {
     posts: Post[];
     onViewportChange: any; // rip types
-    isAddingPost: boolean;
+    isChoosingPostLocation: boolean;
+    isWritingPost: boolean;
+    onChoosePostLocation: (loc: number[]) => {};
 }
 
 export interface IMapComponentState {
