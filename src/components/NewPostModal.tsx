@@ -1,6 +1,5 @@
 import * as React from "react";
 import * as Radium from "radium";
-import {Post} from "../models/Post";
 import * as firebase from "firebase";
 import GeoPoint = firebase.firestore.GeoPoint;
 import {PostSubmission} from "../models/PostSubmission";
@@ -10,13 +9,18 @@ export class NewPostModal extends React.Component<NewPostModalProps, NewPostModa
 
     constructor(props) {
         super(props);
+
+        this.state = {
+            visibleUsername: "",
+            contentText: ""
+        };
     }
 
     private onDone = () => {
         let submission: PostSubmission = {
             location: this.props.location,
-            user: "bgu",
-            visibleUsername: "bgu",
+            user: "wya-tester-" + this.state.visibleUsername,
+            visibleUsername: (this.state.visibleUsername === "") ? "anonymous" : this.state.visibleUsername,
             contentText: this.state.contentText
         };
         this.props.onSubmit(submission);
@@ -32,6 +36,12 @@ export class NewPostModal extends React.Component<NewPostModalProps, NewPostModa
         });
     }
 
+    private onUserTextChange = (event) => {
+        this.setState({
+            visibleUsername: event.target.value
+        });
+    }
+
     render() {
         return (
             <div style={[
@@ -44,6 +54,18 @@ export class NewPostModal extends React.Component<NewPostModalProps, NewPostModa
                                type="text"
                                value={this.state.contentText}
                                onChange={this.onContentTextChange}/>
+                    </label>
+                </div>
+
+                <br/>
+
+                <div style={{display: "inline"}}>
+                    {"as user: "}
+                    <label>
+                        <input ref="content"
+                               type="text"
+                               value={this.state.visibleUsername}
+                               onChange={this.onUserTextChange}/>
                     </label>
                 </div>
 
@@ -88,7 +110,6 @@ export interface NewPostModalProps {
 }
 
 export interface NewPostModalState {
-    author: string;
     visibleUsername: string;
     contentText: string;
 }
