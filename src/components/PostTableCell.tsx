@@ -44,6 +44,20 @@ export class PostTableCell extends React.Component<IPostTableCellProps, IPostTab
         });
     }
 
+    private onDeleteClick = () => {
+        if (window.confirm("Are you sure you want to delete this post?")) {
+            this.props.onDeletePost(this.props.post.documentID as string);
+        }
+    }
+
+    private onUpvoteClick = () => {
+        this.props.onUpvotePost(this.props.post.documentID as string);
+    }
+
+    private onDownvoteClick = () => {
+        this.props.onDownvotePost(this.props.post.documentID as string);
+    }
+
     public render() {
         let timeAgo = moment(this.props.post.timestamp.toMillis()).fromNow();
 
@@ -51,27 +65,48 @@ export class PostTableCell extends React.Component<IPostTableCellProps, IPostTab
             <div
                 onMouseEnter={this.onHoverStart}
                 onMouseLeave={this.onHoverEnd}
-                style={[PostTableCell.styles.container, { backgroundColor: this.state.selected ? "#bbbbbb" : "#ffffff" }]}
+                style={[PostTableCell.styles.container, { backgroundColor: this.state.selected ? "#cccccc" : "#ffffff" }]}
             >
                 <div style={[PostTableCell.styles.topBar]}>
                     <div>
                         {"document ID: " + this.props.post.documentID}
                     </div>
                     <div>
-                        {"author: " + this.props.post.user + " (" + this.props.post.visibleUsername + ")"}
+                        {"author: " + this.props.post.visibleUsername + " (" + this.props.post.user + ")"}
                     </div>
                 </div>
-                <div style={[PostTableCell.styles.contentContainer]}>
-                    {this.props.post.contentText}
-                </div>
-                <div>
-                    {"score: " + (this.state.upvotes - this.state.downvotes).toString()}
-                </div>
-                <div>
-                    {"comments: " + this.state.comments.toString()}
-                </div>
-                <div>
-                    {this.props.post.timestamp.toDate().toString() + " (" + timeAgo + ")"}
+                <div style={[PostTableCell.styles.contentAndButtonsContainer]}>
+                    <div style={[PostTableCell.styles.contentAndMetadataContainer]}>
+                        <div style={[PostTableCell.styles.contentContainer]}>
+                            {this.props.post.contentText}
+                        </div>
+                        <div>
+                            {"score: " + (this.state.upvotes - this.state.downvotes).toString()}
+                        </div>
+                        <div>
+                            {"comments: " + this.state.comments.toString()}
+                        </div>
+                        <div>
+                            {this.props.post.timestamp.toDate().toString() + " (" + timeAgo + ")"}
+                        </div>
+                    </div>
+                    <div style={[PostTableCell.styles.buttonsContainer]}>
+                        <button
+                            onClick={this.onDeleteClick}
+                        >
+                            {"delete"}
+                        </button>
+                        <button
+                            onClick={this.onUpvoteClick}
+                        >
+                            {"upvote"}
+                        </button>
+                        <button
+                            onClick={this.onDownvoteClick}
+                        >
+                            {"downvote"}
+                        </button>
+                    </div>
                 </div>
             </div>
         );
@@ -97,6 +132,22 @@ export class PostTableCell extends React.Component<IPostTableCellProps, IPostTab
             borderWidth: 1,
             marginBottom: "10px"
         },
+        contentAndButtonsContainer: {
+            display: "flex",
+            flexDirection: "row",
+        },
+        buttonsContainer: {
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-evenly",
+            marginLeft: "10px"
+        },
+        contentAndMetadataContainer: {
+            borderRightStyle: "solid",
+            borderColor: "#999999",
+            borderWidth: 1,
+            paddingRight: "10px"
+        },
         contentContainer: {
             marginBottom: "10px"
         }
@@ -106,6 +157,9 @@ export class PostTableCell extends React.Component<IPostTableCellProps, IPostTab
 export interface IPostTableCellProps {
     post: Post;
     key: number;
+    onDeletePost: (postID: string) => void;
+    onUpvotePost: (postID: string) => void;
+    onDownvotePost: (postID: string) => void;
 }
 
 export interface IPostTableCellState {

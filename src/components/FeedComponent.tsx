@@ -4,6 +4,7 @@ import {Post} from "../models/Post";
 import {getOffset} from "tzjs";
 import {ChangeEvent} from "react";
 import {PostTableCell} from "./PostTableCell";
+import {db} from "./pages/LandingPageComponent";
 
 @Radium
 export class FeedComponent extends React.Component<IFeedComponentProps, IFeedComponentState> {
@@ -33,11 +34,11 @@ export class FeedComponent extends React.Component<IFeedComponentProps, IFeedCom
 
     private onStartTimeChange = (e: ChangeEvent<HTMLInputElement>) => {
         this.onTimeChange("startTime", e.target.value);
-    }
+    };
 
     private onEndTimeChange = (e: ChangeEvent<HTMLInputElement>) => {
         this.onTimeChange("endTime", e.target.value);
-    }
+    };
 
     private onTimeChange(key: "startTime" | "endTime", localTime: string) {
         const easternIso = new Date(localTime + ":00Z");
@@ -51,12 +52,45 @@ export class FeedComponent extends React.Component<IFeedComponentProps, IFeedCom
         });
     }
 
+    private onDeletePost = (postID: string) => {
+        console.log("delet this: ", postID);
+        db.collection("posts").doc(postID).delete().then(() => {
+            console.log("successfully deleted post");
+            this.onRefreshPress();
+        });
+    }
+
+    private onUpvotePost = (postID: string) => {
+        console.log("upvot this: ", postID);
+        let newUpvoteRef = db.collection("posts").doc(postID).collection("upvotes").doc()
+        newUpvoteRef.set({
+            documentID: newUpvoteRef.id,
+            user: "wya-test-" + newUpvoteRef.id
+        })
+            .then((docRef) => { console.log("upvoted");
+        });
+    }
+
+    private onDownvotePost = (postID: string) => {
+        console.log("downvot this: ", postID);
+        let newUpvoteRef = db.collection("posts").doc(postID).collection("downvotes").doc()
+        newUpvoteRef.set({
+            documentID: newUpvoteRef.id,
+            user: "wya-test-" + newUpvoteRef.id
+        })
+            .then((docRef) => { console.log("upvoted");
+        });
+    }
+
     public render() {
         let rows = this.props.posts.map((post: Post, rowIndex: number) => {
             return (
                 <PostTableCell
                     post={post}
                     key={rowIndex}
+                    onDeletePost={this.onDeletePost}
+                    onUpvotePost={this.onUpvotePost}
+                    onDownvotePost={this.onDownvotePost}
                 />
             );
         });
@@ -113,6 +147,17 @@ function toLocalTimeEastern(date: Date): string {
     const offset = getOffset("America/New_York", date);
     const easternIso = new Date(date.getTime() - offset * 60 * 1000).toISOString();
     return easternIso.substring(0, 16);
+}
+
+function randomString(length = 20): string {
+    let text = "";
+    let possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    for (let i = 0; i < length; i++) {
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+
+    return text;
 }
 
 export interface IFeedComponentProps {

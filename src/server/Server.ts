@@ -3,7 +3,6 @@ import * as path from "path";
 import * as morgan from "morgan";
 import * as bodyParser from "body-parser";
 import {InitializationState} from "../models/IInitializationState";
-import {ErrorMiddleware} from "./ErrorMiddleware";
 import {DEBUG_PORT, PORT, rootPath} from "./Env";
 import * as exphbs from "express-handlebars";
 import {ApiController} from "./ApiController";
@@ -37,8 +36,6 @@ app.use(ApiController);
 app.use("/js", express.static(jsDir));
 app.use("/res", express.static(resDir));
 app.use("/css", express.static(cssDir));
-
-app.use(ErrorMiddleware);
 
 app.listen(PORT, async () => {
     console.log(`listening on port ${PORT}`);
