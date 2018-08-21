@@ -12,20 +12,9 @@ export class FeedComponent extends React.Component<IFeedComponentProps, IFeedCom
         super(props);
 
         this.state = {
-            newContent: "",
             startTime: new Date("2018-08-01T04:00:00Z"),
-            endTime: new Date()
+            endTime: new Date("2025-08-01T04:00:00Z")
         };
-    }
-
-    private onContentChange(event) {
-        this.setState({
-            newContent: event.target.value
-        });
-    }
-
-    private onContentSubmit() {
-        this.props.onPostSubmit(this.state.newContent);
     }
 
     private onRefreshPress() {
@@ -141,37 +130,25 @@ export class FeedComponent extends React.Component<IFeedComponentProps, IFeedCom
                 }}
             >
                 {rows}
-                <div
-                >
-                    <input ref="newPostContent"
-                           type="text"
-                           value={this.state.newContent}
-                           onChange={this.onContentChange.bind(this)}/>
-
-                    <input
-                        type="button"
-                        value="submit"
-                        onClick={this.onContentSubmit.bind(this)}/>
-
-                    <input
-                        type="button"
-                        value="refresh"
-                        onClick={this.onRefreshPress.bind(this)}/>
-                </div>
                 <div>
                     <input
                         type="datetime-local"
                         value={toLocalTimeEastern(this.state.startTime)}
                         min={new Date("August 1, 2018 00:00:00").toISOString()}
-                        max={new Date().toISOString()}
+                        max={new Date("2025-08-01T04:00:00Z").toISOString()}
                         onChange={this.onStartTimeChange}
                     />
                     <input
                         type="datetime-local"
                         value={toLocalTimeEastern(this.state.endTime)}
                         min={new Date("August 1, 2018 00:00:00").toISOString()}
-                        max={new Date().toISOString()}
+                        max={new Date("2025-08-01T04:00:00Z").toISOString()}
                         onChange={this.onEndTimeChange}
+                    />
+                    <input
+                        type="button"
+                        value="refresh"
+                        onClick={this.onRefreshPress.bind(this)}
                     />
                 </div>
             </div>
@@ -201,7 +178,6 @@ function randomString(length = 20): string {
 
 export interface IFeedComponentProps {
     posts: Post[];
-    onPostSubmit: (string) => void;
     onRefreshPress: () => void;
     onTimeWindowChange: (startTime: Date, endTime: Date) => void;
     isChoosingPostLocation: boolean;
@@ -209,7 +185,6 @@ export interface IFeedComponentProps {
 }
 
 export interface IFeedComponentState {
-    newContent: string;
     startTime: Date;
     endTime: Date;
 }

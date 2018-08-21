@@ -41,7 +41,7 @@ export class LandingPageComponent extends React.Component<any, ILandingPageCompo
             swCorner: new GeoPoint(-90, -180),
             neCorner: new GeoPoint(90, 180),
             startTime: new Date("August 1, 2018 00:00:00"),
-            endTime: new Date(),
+            endTime: new Date("August 1, 2025 00:00:00"),
             user: "any-user",
             isChoosingPostLocation: false,
             isWritingPost: false
@@ -75,28 +75,6 @@ export class LandingPageComponent extends React.Component<any, ILandingPageCompo
         }
     };
 
-
-    private submitPost(content) {
-        /*
-        console.log(content);
-        let post: Post = {
-            content: content,
-            latitude: 47.594 + Math.random() * 0.001,
-            longitude: -122.148 + Math.random() * 0.001,
-        };
-
-        let docName = Math.random().toString(36).replace(/[^a-z]+/g, "").substr(0, 5);
-        let docRef = db.collection("posts").doc(docName);
-        docRef.set(post)
-            .then(writeResult => {
-                console.log(`Document written at: ${writeResult.writeTime}`);
-            })
-            .catch(function (error) {
-                console.error("Error setting document: ", error);
-            });
-            */
-    }
-
     private refresh() {
         this.setState({
             posts: []
@@ -123,7 +101,7 @@ export class LandingPageComponent extends React.Component<any, ILandingPageCompo
         this.refresh();
     }
 
-    private onTimeWindowChange(startTime = new Date("August 1, 2018 00:00:00"), endTime = new Date()) {
+    private onTimeWindowChange(startTime = new Date("August 1, 2018 00:00:00"), endTime = new Date("August 1, 2025 00:00:00")) {
         this.setState({
             startTime: startTime,
             endTime: endTime
@@ -205,7 +183,6 @@ export class LandingPageComponent extends React.Component<any, ILandingPageCompo
                 <div style={[LandingPageComponent.styles.feedContainer]}>
                     <FeedComponent
                         posts={this.state.posts}
-                        onPostSubmit={this.submitPost.bind(this)}
                         onRefreshPress={this.onRefreshPress.bind(this)}
                         onTimeWindowChange={this.onTimeWindowChange.bind(this)}
                         isChoosingPostLocation={this.state.isChoosingPostLocation}
