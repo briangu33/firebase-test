@@ -53,34 +53,73 @@ export class FeedComponent extends React.Component<IFeedComponentProps, IFeedCom
     }
 
     private onDeletePost = (postID: string) => {
+        // delete upvotes, downvotes, comment upvotes, comment downvotes, comments, post (firebase offers no way to do this at all levels)
+
         console.log("delet this: ", postID);
+        db.collection("posts").doc(postID).collection("upvotes").get()
+            .then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    let id = doc.data().documentID;
+                    db.collection("posts").doc(postID).collection("upvotes").doc(id).delete();
+                });
+            });
+        db.collection("posts").doc(postID).collection("downvotes").get()
+            .then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    let id = doc.data().documentID;
+                    db.collection("posts").doc(postID).collection("downvotes").doc(id).delete();
+                });
+            });
+        db.collection("posts").doc(postID).collection("comments").get()
+            .then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    let id = doc.data().documentID;
+                    db.collection("posts").doc(postID).collection("comments").doc(id).collection("upvotes").get()
+                        .then((querySnapshot2) => {
+                            querySnapshot.forEach((doc2) => {
+                                let id2 = doc2.data().documentID;
+                                db.collection("posts").doc(postID).collection("comments").doc(id).collection("upvotes").doc(id2).delete();
+                            });
+                        });
+                    db.collection("posts").doc(postID).collection("comments").doc(id).collection("downvotes").get()
+                        .then((querySnapshot2) => {
+                            querySnapshot.forEach((doc2) => {
+                                let id2 = doc2.data().documentID;
+                                db.collection("posts").doc(postID).collection("comments").doc(id).collection("downvotes").doc(id2).delete();
+                            });
+                        });
+                    db.collection("posts").doc(postID).collection("comments").doc(id).delete();
+                });
+            });
         db.collection("posts").doc(postID).delete().then(() => {
             console.log("successfully deleted post");
             this.onRefreshPress();
         });
-    }
+    };
 
     private onUpvotePost = (postID: string) => {
         console.log("upvot this: ", postID);
-        let newUpvoteRef = db.collection("posts").doc(postID).collection("upvotes").doc()
+        let newUpvoteRef = db.collection("posts").doc(postID).collection("upvotes").doc();
         newUpvoteRef.set({
             documentID: newUpvoteRef.id,
             user: "wya-test-" + newUpvoteRef.id
         })
-            .then((docRef) => { console.log("upvoted");
-        });
-    }
+            .then((docRef) => {
+                console.log("upvoted");
+            });
+    };
 
     private onDownvotePost = (postID: string) => {
         console.log("downvot this: ", postID);
-        let newUpvoteRef = db.collection("posts").doc(postID).collection("downvotes").doc()
+        let newUpvoteRef = db.collection("posts").doc(postID).collection("downvotes").doc();
         newUpvoteRef.set({
             documentID: newUpvoteRef.id,
             user: "wya-test-" + newUpvoteRef.id
         })
-            .then((docRef) => { console.log("upvoted");
-        });
-    }
+            .then((docRef) => {
+                console.log("upvoted");
+            });
+    };
 
     public render() {
         let rows = this.props.posts.map((post: Post, rowIndex: number) => {
