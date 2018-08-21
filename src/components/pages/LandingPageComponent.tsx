@@ -23,7 +23,7 @@ firebase.initializeApp(config);
 
 // Initialize Cloud Firestore through Firebase
 export const db = firebase.firestore();
-const settings = { timestampsInSnapshots: true };
+const settings = {timestampsInSnapshots: true};
 db.settings(settings);
 
 @Radium
@@ -34,6 +34,10 @@ export class LandingPageComponent extends React.Component<any, ILandingPageCompo
         this.state = {
             posts: [],
             onlyOnePost: false,
+            swCorner: new GeoPoint(-90, -180),
+            neCorner: new GeoPoint(90, 180),
+            startTime: new Date("August 1, 2018 00:00:00"),
+            endTime: new Date(),
             user: "any-user"
         };
 
@@ -76,20 +80,37 @@ export class LandingPageComponent extends React.Component<any, ILandingPageCompo
 
         let posts: Post[] = [];
 
-        db.collection("posts").get().then((querySnapshot) => {
-            querySnapshot.forEach((doc) => {
-                let post = doc.data() as Post;
-                if (post.location.latitude > this.state.swCorner.latitude && post.location.latitude < this.state.neCorner.latitude) {
-                    if (post.location.longitude > this.state.swCorner.longitude
-                        && post.location.longitude < this.state.neCorner.longitude) {
+        db.collection("posts").get()
+            .then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    let post = doc.data() as Post;
+                    if (this.isInMapRegion(post) && this.isInTimeWindow(post)) {
                         posts.push(post);
                     }
-                }
-                this.setState({
-                    posts: posts
+                    this.setState({
+                        posts: posts
+                    });
                 });
             });
+    }
+
+    private onTimeWindowChange(startTime = new Date("August 1, 2018 00:00:00"), endTime = new Date()) {
+        this.setState({
+            startTime: startTime,
+            endTime: endTime
         });
+    }
+
+    private isInMapRegion(post: Post) {
+        return post.location.latitude > this.state.swCorner.latitude
+            && post.location.latitude < this.state.neCorner.latitude
+            && post.location.longitude > this.state.swCorner.longitude
+            && post.location.longitude < this.state.neCorner.longitude;
+    }
+
+    private isInTimeWindow(post: Post) {
+        return post.timestamp.toMillis() > this.state.startTime.getTime()
+            && post.timestamp.toMillis() < this.state.endTime.getTime();
     }
 
     private onViewportChange(swCorner: GeoPoint, neCorner: GeoPoint) {
@@ -104,14 +125,17 @@ export class LandingPageComponent extends React.Component<any, ILandingPageCompo
         console.log(mapContainerElement ? mapContainerElement.clientHeight : "none");
 
         return (
-            <div style={[
-                LandingPageComponent.styles.container
-            ]}>
+            <div
+                style={[
+                    LandingPageComponent.styles.container
+                ]}
+            >
                 <div style={[LandingPageComponent.styles.feedContainer]}>
                     <FeedComponent
                         posts={this.state.posts}
                         onPostSubmit={this.submitPost.bind(this)}
                         onRefreshPress={this.onRefreshPress.bind(this)}
+                        onTimeWindowChange={this.onTimeWindowChange.bind(this)}
                     />
                 </div>
                 <div style={[LandingPageComponent.styles.mapContainer]} id={"map-container"}>
@@ -132,7 +156,7 @@ export class LandingPageComponent extends React.Component<any, ILandingPageCompo
         mapContainer: {
             flex: 1,
             height: "100%",
-            width: "100%",
+            width: "100%"
         },
         feedContainer: {
             flex: 1,
@@ -143,8 +167,10 @@ export class LandingPageComponent extends React.Component<any, ILandingPageCompo
 
 export interface ILandingPageComponentState {
     posts: Post[];
-    swCorner?: GeoPoint;
-    neCorner?: GeoPoint;
+    swCorner: GeoPoint;
+    neCorner: GeoPoint;
+    startTime?: Date;
+    endTime?: Date;
     user: string;
     onlyOnePost: boolean;
 }

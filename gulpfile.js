@@ -38,6 +38,7 @@ gulp.task("webpack", ["ts"], function () {
             module: {
                 loaders: [
                     {test: /\.json/, loader: 'json-loader'},
+                    {test: /\.css$/, loader: 'style!css!'}
                 ],
             },
         }))

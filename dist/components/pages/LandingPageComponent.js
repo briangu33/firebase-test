@@ -23,6 +23,8 @@ var React = require("react");
 var Radium = require("radium");
 var MapComponent_1 = require("../MapComponent");
 var FeedComponent_1 = require("../FeedComponent");
+var fb = require("firebase");
+var GeoPoint = fb.firestore.GeoPoint;
 exports.firebase = require("firebase");
 // Required for side-effects
 require("firebase/firestore");
@@ -50,6 +52,10 @@ var LandingPageComponent = LandingPageComponent_1 = function (_React$Component) 
         _this.state = {
             posts: [],
             onlyOnePost: false,
+            swCorner: new GeoPoint(-90, -180),
+            neCorner: new GeoPoint(90, 180),
+            startTime: new Date("August 1, 2018 00:00:00"),
+            endTime: new Date(),
             user: "any-user"
         };
         exports.db.collection("posts").get().then(function (querySnapshot) {
@@ -95,16 +101,35 @@ var LandingPageComponent = LandingPageComponent_1 = function (_React$Component) 
             exports.db.collection("posts").get().then(function (querySnapshot) {
                 querySnapshot.forEach(function (doc) {
                     var post = doc.data();
-                    if (post.location.latitude > _this2.state.swCorner.latitude && post.location.latitude < _this2.state.neCorner.latitude) {
-                        if (post.location.longitude > _this2.state.swCorner.longitude && post.location.longitude < _this2.state.neCorner.longitude) {
-                            posts.push(post);
-                        }
+                    if (_this2.isInMapRegion(post) && _this2.isInTimeWindow(post)) {
+                        posts.push(post);
                     }
                     _this2.setState({
                         posts: posts
                     });
                 });
             });
+        }
+    }, {
+        key: "onTimeWindowChange",
+        value: function onTimeWindowChange() {
+            var startTime = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : new Date("August 1, 2018 00:00:00");
+            var endTime = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new Date();
+
+            this.setState({
+                startTime: startTime,
+                endTime: endTime
+            });
+        }
+    }, {
+        key: "isInMapRegion",
+        value: function isInMapRegion(post) {
+            return post.location.latitude > this.state.swCorner.latitude && post.location.latitude < this.state.neCorner.latitude && post.location.longitude > this.state.swCorner.longitude && post.location.longitude < this.state.neCorner.longitude;
+        }
+    }, {
+        key: "isInTimeWindow",
+        value: function isInTimeWindow(post) {
+            return post.timestamp.toMillis() > this.state.startTime.getTime() && post.timestamp.toMillis() < this.state.endTime.getTime();
         }
     }, {
         key: "onViewportChange",
@@ -119,7 +144,7 @@ var LandingPageComponent = LandingPageComponent_1 = function (_React$Component) 
         value: function render() {
             var mapContainerElement = document.getElementById("map-container");
             console.log(mapContainerElement ? mapContainerElement.clientHeight : "none");
-            return React.createElement("div", { style: [LandingPageComponent_1.styles.container] }, React.createElement("div", { style: [LandingPageComponent_1.styles.feedContainer] }, React.createElement(FeedComponent_1.FeedComponent, { posts: this.state.posts, onPostSubmit: this.submitPost.bind(this), onRefreshPress: this.onRefreshPress.bind(this) })), React.createElement("div", { style: [LandingPageComponent_1.styles.mapContainer], id: "map-container" }, React.createElement(MapComponent_1.MapComponent, { posts: this.state.posts, onViewportChange: this.onViewportChange.bind(this) })));
+            return React.createElement("div", { style: [LandingPageComponent_1.styles.container] }, React.createElement("div", { style: [LandingPageComponent_1.styles.feedContainer] }, React.createElement(FeedComponent_1.FeedComponent, { posts: this.state.posts, onPostSubmit: this.submitPost.bind(this), onRefreshPress: this.onRefreshPress.bind(this), onTimeWindowChange: this.onTimeWindowChange.bind(this) })), React.createElement("div", { style: [LandingPageComponent_1.styles.mapContainer], id: "map-container" }, React.createElement(MapComponent_1.MapComponent, { posts: this.state.posts, onViewportChange: this.onViewportChange.bind(this) })));
         }
     }]);
 

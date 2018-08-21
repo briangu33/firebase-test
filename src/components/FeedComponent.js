@@ -8,11 +8,21 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = require("react");
 const Radium = require("radium");
+const tzjs_1 = require("tzjs");
+const PostTableCell_1 = require("./PostTableCell");
 let FeedComponent = class FeedComponent extends React.Component {
     constructor(props) {
         super(props);
+        this.onStartTimeChange = (e) => {
+            this.onTimeChange("startTime", e.target.value);
+        };
+        this.onEndTimeChange = (e) => {
+            this.onTimeChange("endTime", e.target.value);
+        };
         this.state = {
-            newContent: ""
+            newContent: "",
+            startTime: new Date("2018-08-01T04:00:00Z"),
+            endTime: new Date()
         };
     }
     onContentChange(event) {
@@ -26,27 +36,42 @@ let FeedComponent = class FeedComponent extends React.Component {
     onRefreshPress() {
         this.props.onRefreshPress();
     }
+    onTimeChange(key, localTime) {
+        const easternIso = new Date(localTime + ":00Z");
+        const offset = tzjs_1.getOffset("America/New_York", easternIso);
+        const date = new Date(easternIso.getTime() + offset * 60 * 1000);
+        const obj = {};
+        obj[key] = date;
+        this.setState(obj, () => {
+            this.props.onTimeWindowChange(this.state.startTime, this.state.endTime);
+        });
+    }
     render() {
         let rows = this.props.posts.map((post, rowIndex) => {
-            return (React.createElement("div", { key: rowIndex, style: {
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "flex-start",
-                    height: 40,
-                    borderWidth: 3,
-                } },
-                rowIndex,
-                post.contentText));
+            return (React.createElement(PostTableCell_1.PostTableCell, { post: post, key: rowIndex }));
         });
-        return (React.createElement("div", null,
+        return (React.createElement("div", { style: {
+                display: "block"
+            } },
             rows,
             React.createElement("div", null,
                 React.createElement("input", { ref: "newPostContent", type: "text", value: this.state.newContent, onChange: this.onContentChange.bind(this) }),
                 React.createElement("input", { type: "button", value: "submit", onClick: this.onContentSubmit.bind(this) }),
-                React.createElement("input", { type: "button", value: "refresh", onClick: this.onRefreshPress.bind(this) }))));
+                React.createElement("input", { type: "button", value: "refresh", onClick: this.onRefreshPress.bind(this) })),
+            React.createElement("div", null,
+                React.createElement("input", { type: "datetime-local", value: toLocalTimeEastern(this.state.startTime), min: new Date("August 1, 2018 00:00:00").toISOString(), max: new Date().toISOString(), onChange: this.onStartTimeChange }),
+                React.createElement("input", { type: "datetime-local", value: toLocalTimeEastern(this.state.endTime), min: new Date("August 1, 2018 00:00:00").toISOString(), max: new Date().toISOString(), onChange: this.onEndTimeChange }))));
     }
 };
 FeedComponent = __decorate([
     Radium
 ], FeedComponent);
 exports.FeedComponent = FeedComponent;
+/**
+ * eg. toLocalTimeEastern(new Date("2020-01-01T04:00:00Z")) returns "2020-01-01T00:00"
+ */
+function toLocalTimeEastern(date) {
+    const offset = tzjs_1.getOffset("America/New_York", date);
+    const easternIso = new Date(date.getTime() - offset * 60 * 1000).toISOString();
+    return easternIso.substring(0, 16);
+}

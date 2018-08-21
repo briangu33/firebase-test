@@ -21,6 +21,8 @@ var __decorate = undefined && undefined.__decorate || function (decorators, targ
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
 var Radium = require("radium");
+var tzjs_1 = require("tzjs");
+var PostTableCell_1 = require("./PostTableCell");
 var FeedComponent = function (_React$Component) {
     _inherits(FeedComponent, _React$Component);
 
@@ -29,8 +31,16 @@ var FeedComponent = function (_React$Component) {
 
         var _this = _possibleConstructorReturn(this, (FeedComponent.__proto__ || Object.getPrototypeOf(FeedComponent)).call(this, props));
 
+        _this.onStartTimeChange = function (e) {
+            _this.onTimeChange("startTime", e.target.value);
+        };
+        _this.onEndTimeChange = function (e) {
+            _this.onTimeChange("endTime", e.target.value);
+        };
         _this.state = {
-            newContent: ""
+            newContent: "",
+            startTime: new Date("2018-08-01T04:00:00Z"),
+            endTime: new Date()
         };
         return _this;
     }
@@ -53,18 +63,28 @@ var FeedComponent = function (_React$Component) {
             this.props.onRefreshPress();
         }
     }, {
+        key: "onTimeChange",
+        value: function onTimeChange(key, localTime) {
+            var _this2 = this;
+
+            var easternIso = new Date(localTime + ":00Z");
+            var offset = tzjs_1.getOffset("America/New_York", easternIso);
+            var date = new Date(easternIso.getTime() + offset * 60 * 1000);
+            var obj = {};
+            obj[key] = date;
+            this.setState(obj, function () {
+                _this2.props.onTimeWindowChange(_this2.state.startTime, _this2.state.endTime);
+            });
+        }
+    }, {
         key: "render",
         value: function render() {
             var rows = this.props.posts.map(function (post, rowIndex) {
-                return React.createElement("div", { key: rowIndex, style: {
-                        display: "flex",
-                        flexDirection: "row",
-                        justifyContent: "flex-start",
-                        height: 40,
-                        borderWidth: 3
-                    } }, rowIndex, post.contentText);
+                return React.createElement(PostTableCell_1.PostTableCell, { post: post, key: rowIndex });
             });
-            return React.createElement("div", null, rows, React.createElement("div", null, React.createElement("input", { ref: "newPostContent", type: "text", value: this.state.newContent, onChange: this.onContentChange.bind(this) }), React.createElement("input", { type: "button", value: "submit", onClick: this.onContentSubmit.bind(this) }), React.createElement("input", { type: "button", value: "refresh", onClick: this.onRefreshPress.bind(this) })));
+            return React.createElement("div", { style: {
+                    display: "block"
+                } }, rows, React.createElement("div", null, React.createElement("input", { ref: "newPostContent", type: "text", value: this.state.newContent, onChange: this.onContentChange.bind(this) }), React.createElement("input", { type: "button", value: "submit", onClick: this.onContentSubmit.bind(this) }), React.createElement("input", { type: "button", value: "refresh", onClick: this.onRefreshPress.bind(this) })), React.createElement("div", null, React.createElement("input", { type: "datetime-local", value: toLocalTimeEastern(this.state.startTime), min: new Date("August 1, 2018 00:00:00").toISOString(), max: new Date().toISOString(), onChange: this.onStartTimeChange }), React.createElement("input", { type: "datetime-local", value: toLocalTimeEastern(this.state.endTime), min: new Date("August 1, 2018 00:00:00").toISOString(), max: new Date().toISOString(), onChange: this.onEndTimeChange })));
         }
     }]);
 
@@ -72,3 +92,11 @@ var FeedComponent = function (_React$Component) {
 }(React.Component);
 FeedComponent = __decorate([Radium], FeedComponent);
 exports.FeedComponent = FeedComponent;
+/**
+ * eg. toLocalTimeEastern(new Date("2020-01-01T04:00:00Z")) returns "2020-01-01T00:00"
+ */
+function toLocalTimeEastern(date) {
+    var offset = tzjs_1.getOffset("America/New_York", date);
+    var easternIso = new Date(date.getTime() - offset * 60 * 1000).toISOString();
+    return easternIso.substring(0, 16);
+}
