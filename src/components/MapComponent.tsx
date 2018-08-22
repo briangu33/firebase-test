@@ -14,11 +14,16 @@ const MAPBOX_TOKEN = "pk.eyJ1IjoiYmd1IiwiYSI6ImNqY2RwZ2M4bzBpOXkzM3Q5bXZ2ejAxeGw
 export class MapComponent extends React.Component<any, IMapComponentState> {
     constructor(props) {
         super(props);
+
+        let centerX = -122.135260;
+        let centerY = 37.729976;
+        let zoom = 13;
+
         this.state = {
             viewport: {
-                latitude: 37.729976,
-                longitude: -122.135260,
-                zoom: 13,
+                latitude: centerY,
+                longitude: centerX,
+                zoom: zoom,
                 bearing: 0,
                 pitch: 0,
                 width: window.innerWidth / 2,
@@ -74,13 +79,29 @@ export class MapComponent extends React.Component<any, IMapComponentState> {
 
 
     public render() {
+        let viewport = {
+            latitude: this.state.viewport.latitude,
+            longitude: this.state.viewport.longitude,
+            zoom: this.state.viewport.zoom,
+            bearing: this.state.viewport.bearing,
+            pitch: this.state.viewport.pitch,
+            width: this.state.viewport.width,
+            height: this.state.viewport.height
+        };
+
+        if (this.props.onlyOnePost && this.props.posts && this.props.posts.length === 1) {
+            viewport.longitude = this.props.posts[0].location.longitude;
+            viewport.latitude = this.props.posts[0].location.latitude;
+            viewport.zoom = 13;
+        }
+
         return (
             <div>
                 <pre id="info">
                     {"long: " + this.state.mouseLng + ", lat: " + this.state.mouseLat}
                 </pre>
                 <MapGL
-                    {...this.state.viewport}
+                    {...viewport}
                     onViewportChange={this.onViewportChange.bind(this)}
                     mapboxApiAccessToken={MAPBOX_TOKEN}
                     onClick={this.onClick}
@@ -104,6 +125,9 @@ export interface IMapComponentProps {
     onChoosePostLocation: (loc: number[]) => void;
     selectedIndex?: number;
     onClickMapMarker: (index: number) => void;
+    onlyOnePost: boolean;
+    singlePostLat: number;
+    singlePostLong: number;
 }
 
 export interface IMapComponentState {

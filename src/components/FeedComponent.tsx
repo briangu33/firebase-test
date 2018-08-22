@@ -110,6 +110,16 @@ export class FeedComponent extends React.Component<IFeedComponentProps, IFeedCom
             });
     };
 
+    private onPostIDChange = (event) => {
+        this.setState({
+            singlePostID: event.target.value
+        });
+    }
+
+    private onSinglePostQuery = () => {
+        this.props.onSinglePostQuery(this.state.singlePostID);
+    }
+
     public render() {
         let rows = this.props.posts.map((post: Post, rowIndex: number) => {
             return (
@@ -122,7 +132,7 @@ export class FeedComponent extends React.Component<IFeedComponentProps, IFeedCom
                     onDownvotePost={this.onDownvotePost}
                     onHover={this.props.onHoverOverPost}
                     onUnhover={this.props.onUnhoverOverPost}
-                    isSelected={this.props.selectedIndex && this.props.selectedIndex === rowIndex}
+                    isSelected={(this.props.selectedIndex !== null) && (this.props.selectedIndex === rowIndex)}
                 />
             );
         });
@@ -153,6 +163,18 @@ export class FeedComponent extends React.Component<IFeedComponentProps, IFeedCom
                         type="button"
                         value="refresh"
                         onClick={this.onRefreshPress.bind(this)}
+                    />
+                </div>
+                <div>
+                    <input
+                        type="text"
+                        value={this.state.singlePostID}
+                        onChange={this.onPostIDChange}
+                    />
+                    <input
+                        type="button"
+                        value="query by post id"
+                        onClick={this.onSinglePostQuery}
                     />
                 </div>
             </div>
@@ -189,9 +211,11 @@ export interface IFeedComponentProps {
     onHoverOverPost: (index: number) => void;
     onUnhoverOverPost: (index: number) => void;
     selectedIndex: number;
+    onSinglePostQuery: (postID: string) => void;
 }
 
 export interface IFeedComponentState {
     startTime: Date;
     endTime: Date;
+    singlePostID?: string;
 }

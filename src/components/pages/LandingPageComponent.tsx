@@ -13,7 +13,7 @@ export const firebase = require("firebase");
 // Required for side-effects
 require("firebase/firestore");
 
-var config = {
+let config = {
     apiKey: "AIzaSyCtB2dkz32dvHJJs04utPn7fVtfD3nKObU",
     authDomain: "wya-mit.firebaseapp.com",
     databaseURL: "https://wya-mit.firebaseio.com",
@@ -66,9 +66,7 @@ export class LandingPageComponent extends React.Component<any, ILandingPageCompo
 
     private _onKeyDown = (event) => {
         const keyName = event.key;
-        console.log(keyName.toString());
         if (keyName === "Escape" && this.state.isChoosingPostLocation) {
-            console.log("cancelling");
             this.setState({
                 isChoosingPostLocation: false
             });
@@ -77,7 +75,8 @@ export class LandingPageComponent extends React.Component<any, ILandingPageCompo
 
     private refresh() {
         this.setState({
-            posts: []
+            posts: [],
+            onlyOnePost: false
         });
 
         let posts: Post[] = [];
@@ -190,9 +189,27 @@ export class LandingPageComponent extends React.Component<any, ILandingPageCompo
         });
     };
 
+    private onSinglePostQuery = (postID: string) => {
+        this.setState({
+            posts: [],
+            onlyOnePost: true
+        });
+
+        let posts: Post[] = [];
+
+        db.collection("posts").doc(postID).get()
+            .then(doc => {
+                if (doc.exists) {
+                    posts = [(doc.data() as Post)];
+                    this.setState({
+                        posts: posts
+                    });
+                }
+            });
+    }
+
     public render() {
         let mapContainerElement = document.getElementById("map-container");
-        console.log(mapContainerElement ? mapContainerElement.clientHeight : "none");
 
         return (
             <div
@@ -210,6 +227,7 @@ export class LandingPageComponent extends React.Component<any, ILandingPageCompo
                         onHoverOverPost={this.onHoverOverPost}
                         onUnhoverOverPost={this.onUnhoverOverPost}
                         selectedIndex={this.state.selectedIndex}
+                        onSinglePostQuery={this.onSinglePostQuery}
                     />
                 </div>
                 <div style={[LandingPageComponent.styles.mapContainer]} id={"map-container"}>
@@ -221,6 +239,9 @@ export class LandingPageComponent extends React.Component<any, ILandingPageCompo
                         onChoosePostLocation={this.onChoosePostLocation}
                         selectedIndex={this.state.selectedIndex}
                         onClickMapMarker={this.onClickMapMarker}
+                        onlyOnePost={this.state.onlyOnePost}
+                        singlePostLat={this.state.posts[0] ? this.state.posts[0].location.latitude : 37.729976}
+                        singlePostLong={this.state.posts[0] ? this.state.posts[0].location.longitude : -122.135260}
                     />
                 </div>
                 <div style={[LandingPageComponent.styles.addButton]}>
