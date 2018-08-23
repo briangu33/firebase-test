@@ -51,7 +51,7 @@ export class MapComponent extends React.Component<any, IMapComponentState> {
                 <CityPin
                     size={20}
                     onClick={this.onClickMarker}
-                    selected={this.props.selectedIndex && index === this.props.selectedIndex}
+                    selected={(this.props.selectedIndex !== null) && (index === this.props.selectedIndex)}
                     index={index}
                 />
             </Marker>
