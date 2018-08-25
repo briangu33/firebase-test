@@ -79,10 +79,10 @@ export class PostTableCell extends React.Component<IPostTableCellProps, IPostTab
             >
                 <div style={[PostTableCell.styles.topBar]}>
                     <div>
-                        {"document ID: " + this.props.post.documentID}
+                        {"author: " + this.props.post.visibleUsername + " (" + this.props.post.user + ")"}
                     </div>
                     <div>
-                        {"author: " + this.props.post.visibleUsername + " (" + this.props.post.user + ")"}
+                        {"document ID: " + this.props.post.documentID}
                     </div>
                 </div>
                 <div style={[PostTableCell.styles.contentAndButtonsContainer]}>

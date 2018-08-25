@@ -38,6 +38,7 @@
 
 <script src="https://www.gstatic.com/firebasejs/5.4.0/firebase.js"></script>
 <script>
+
     // Initialize Firebase
     var config = {
         apiKey: "AIzaSyCtB2dkz32dvHJJs04utPn7fVtfD3nKObU",
@@ -48,6 +49,10 @@
         messagingSenderId: "385985702046"
     };
     firebase.initializeApp(config);
+    firebase.auth().signInWithEmailAndPassword("wya.devs@gmail.com", "Whereyouat?").catch((error) => {
+        console.log("error code", error.code);
+        console.log(error.message);
+    })
 </script>
 <script>
     const initializedState = {{{str this}}};

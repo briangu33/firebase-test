@@ -2,7 +2,6 @@ import * as React from "react";
 import * as Radium from "radium";
 import MapGL, {Marker, Popup, NavigationControl} from "react-map-gl";
 import {Viewport} from "../models/Viewport";
-import {Post} from "../models/Post";
 import CityPin from "./CityPin";
 import {bounds} from "@mapbox/geo-viewport";
 import * as firebase from "firebase";
@@ -15,8 +14,8 @@ export class MapComponent extends React.Component<any, IMapComponentState> {
     constructor(props) {
         super(props);
 
-        let centerX = -122.135260;
-        let centerY = 37.729976;
+        let centerX = -71.093333;
+        let centerY = 42.358601;
         let zoom = 13;
 
         this.state = {
@@ -43,11 +42,11 @@ export class MapComponent extends React.Component<any, IMapComponentState> {
         // some dumb ordering thing
     }
 
-    private _renderPostMarker(post, index) {
+    private _renderLocationMarker(location, index) {
         return (
             <Marker key={`marker-${index}`}
-                    longitude={post.location.longitude}
-                    latitude={post.location.latitude}>
+                    longitude={location.longitude}
+                    latitude={location.latitude}>
                 <CityPin
                     size={20}
                     onClick={this.onClickMarker}
@@ -59,13 +58,13 @@ export class MapComponent extends React.Component<any, IMapComponentState> {
     }
 
     private onClick = (...args) => {
-        if (this.props.isChoosingPostLocation) {
-            this.props.onChoosePostLocation(args[0].lngLat);
+        if (this.props.isChoosingNewContentLocation) {
+            this.props.onChooseNewContentLocation(args[0].lngLat);
         }
     };
 
     private onClickMarker = (index: number) => {
-        if (!this.props.isChoosingPostLocation && !this.props.isWritingPost) {
+        if (!this.props.isChoosingNewContentLocation && !this.props.isWritingNewContent) {
             this.props.onClickMapMarker(index);
         }
     }
@@ -89,10 +88,12 @@ export class MapComponent extends React.Component<any, IMapComponentState> {
             height: this.state.viewport.height
         };
 
-        if (this.props.onlyOnePost && this.props.posts && this.props.posts.length === 1) {
-            viewport.longitude = this.props.posts[0].location.longitude;
-            viewport.latitude = this.props.posts[0].location.latitude;
-            viewport.zoom = 13;
+        if (this.props.withCenter !== null) {
+            viewport.longitude = this.props.withCenter.longitude;
+            viewport.latitude = this.props.withCenter.latitude;
+        }
+        if (this.props.withZoom !== null) {
+            viewport.zoom = this.props.withZoom;
         }
 
         return (
@@ -106,10 +107,10 @@ export class MapComponent extends React.Component<any, IMapComponentState> {
                     mapboxApiAccessToken={MAPBOX_TOKEN}
                     onClick={this.onClick}
                     onHover={this.onHover}
-                    dragPan={!this.props.isChoosingPostLocation}
-                    doubleClickZoom={!this.props.isChoosingPostLocation}
+                    dragPan={!this.props.isChoosingNewContentLocation}
+                    doubleClickZoom={!this.props.isChoosingNewContentLocation}
                 >
-                    {this.props.posts.map(this._renderPostMarker.bind(this))}
+                    {this.props.locations.map(this._renderLocationMarker.bind(this))}
                 </MapGL>
             </div>
         );
@@ -118,16 +119,16 @@ export class MapComponent extends React.Component<any, IMapComponentState> {
 }
 
 export interface IMapComponentProps {
-    posts: Post[];
+    locations: GeoPoint[];
     onViewportChange: any; // rip types
-    isChoosingPostLocation: boolean;
-    isWritingPost: boolean;
-    onChoosePostLocation: (loc: number[]) => void;
+    isChoosingNewContentLocation: boolean;
+    isWritingNewContent: boolean;
+    onChooseNewContentLocation: (loc: number[]) => void;
     selectedIndex?: number;
     onClickMapMarker: (index: number) => void;
-    onlyOnePost: boolean;
-    singlePostLat: number;
-    singlePostLong: number;
+    onlyOneItem: boolean;
+    withCenter?: GeoPoint;
+    withZoom?: number;
 }
 
 export interface IMapComponentState {

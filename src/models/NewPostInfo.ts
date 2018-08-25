@@ -1,7 +1,7 @@
 import * as firebase from "firebase";
 import GeoPoint = firebase.firestore.GeoPoint;
 
-export interface PostSubmission {
+export interface NewPostInfo {
     location: GeoPoint;
     user: String;
     contentText: String;

@@ -7,7 +7,7 @@ import {PostTableCell} from "./PostTableCell";
 import {db} from "./pages/LandingPageComponent";
 
 @Radium
-export class FeedComponent extends React.Component<IFeedComponentProps, IFeedComponentState> {
+export class PostsFeedComponent extends React.Component<IPostsFeedComponentProps, IPostsFeedComponentState> {
     constructor(props) {
         super(props);
 
@@ -202,7 +202,7 @@ function randomString(length = 20): string {
     return text;
 }
 
-export interface IFeedComponentProps {
+export interface IPostsFeedComponentProps {
     posts: Post[];
     onRefreshPress: () => void;
     onTimeWindowChange: (startTime: Date, endTime: Date) => void;
@@ -214,7 +214,7 @@ export interface IFeedComponentProps {
     onSinglePostQuery: (postID: string) => void;
 }
 
-export interface IFeedComponentState {
+export interface IPostsFeedComponentState {
     startTime: Date;
     endTime: Date;
     singlePostID?: string;

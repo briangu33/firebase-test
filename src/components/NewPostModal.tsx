@@ -2,7 +2,7 @@ import * as React from "react";
 import * as Radium from "radium";
 import * as firebase from "firebase";
 import GeoPoint = firebase.firestore.GeoPoint;
-import {PostSubmission} from "../models/PostSubmission";
+import {NewPostInfo} from "../models/NewPostInfo";
 
 @Radium
 export class NewPostModal extends React.Component<NewPostModalProps, NewPostModalState> {
@@ -17,7 +17,7 @@ export class NewPostModal extends React.Component<NewPostModalProps, NewPostModa
     }
 
     private onDone = () => {
-        let submission: PostSubmission = {
+        let submission: NewPostInfo = {
             location: this.props.location,
             user: "wya-tester-" + this.state.visibleUsername,
             visibleUsername: (this.state.visibleUsername === "") ? "anonymous" : this.state.visibleUsername,
@@ -104,7 +104,7 @@ export class NewPostModal extends React.Component<NewPostModalProps, NewPostModa
 }
 
 export interface NewPostModalProps {
-    onSubmit: (submission: PostSubmission) => void;
+    onSubmit: (submission: NewPostInfo) => void;
     onCancel: () => void;
     location: GeoPoint;
 }

@@ -1,13 +1,17 @@
 import * as React from "react";
 import * as Radium from "radium";
 import {MapComponent} from "../MapComponent";
-import {FeedComponent} from "../FeedComponent";
+import {PostsFeedComponent} from "../PostsFeedComponent";
 import {Post} from "../../models/Post";
 import * as fb from "firebase";
 import GeoPoint = fb.firestore.GeoPoint;
 import {NewPostModal} from "../NewPostModal";
 import * as ReactModal from "react-modal";
-import {PostSubmission} from "../../models/PostSubmission";
+import {NewPostInfo} from "../../models/NewPostInfo";
+import {Challenge} from "../../models/Challenge";
+import {ChallengesFeedComponent} from "../ChallengesFeedComponent";
+import {NewChallengeInfo} from "../../models/NewChallengeInfo";
+import {NewChallengeModal} from "../NewChallengeModal";
 
 export const firebase = require("firebase");
 // Required for side-effects
@@ -23,7 +27,6 @@ let config = {
 };
 firebase.initializeApp(config);
 
-
 // Initialize Cloud Firestore through Firebase
 export const db = firebase.firestore();
 const settings = {timestampsInSnapshots: true};
@@ -37,6 +40,7 @@ export class LandingPageComponent extends React.Component<any, ILandingPageCompo
 
         this.state = {
             posts: [],
+            challenges: [],
             onlyOnePost: false,
             swCorner: new GeoPoint(-90, -180),
             neCorner: new GeoPoint(90, 180),
@@ -44,13 +48,23 @@ export class LandingPageComponent extends React.Component<any, ILandingPageCompo
             endTime: new Date("August 1, 2025 00:00:00"),
             user: "any-user",
             isChoosingPostLocation: false,
-            isWritingPost: false
+            isWritingPost: false,
+            isChoosingChallengeLocation: false,
+            isWritingChallenge: false,
+            mode: LandingPageMode.Posts
         };
 
         db.collection("posts").get().then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
                 console.log(doc.data());
                 this.state.posts.push(doc.data());
+                this.setState({});
+            });
+        });
+
+        db.collection("challenges").get().then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                this.state.challenges.push(doc.data());
                 this.setState({});
             });
         });
@@ -68,7 +82,10 @@ export class LandingPageComponent extends React.Component<any, ILandingPageCompo
         const keyName = event.key;
         if (keyName === "Escape" && this.state.isChoosingPostLocation) {
             this.setState({
-                isChoosingPostLocation: false
+                isChoosingPostLocation: false,
+                isChoosingChallengeLocation: false,
+                isWritingPost: false,
+                isWritingChallenge: false
             });
         }
     };
@@ -76,10 +93,12 @@ export class LandingPageComponent extends React.Component<any, ILandingPageCompo
     private refresh() {
         this.setState({
             posts: [],
+            challenges: [],
             onlyOnePost: false
         });
 
         let posts: Post[] = [];
+        let challenges: Challenge[] = [];
 
         db.collection("posts").get()
             .then((querySnapshot) => {
@@ -93,8 +112,27 @@ export class LandingPageComponent extends React.Component<any, ILandingPageCompo
                     });
                 });
             });
+
+        db.collection("challenges").get()
+            .then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    let challenge = doc.data() as Challenge;
+                    challenges.push(challenge);
+                    this.setState({
+                        challenges: challenges
+                    });
+                });
+            });
     }
 
+    private getMapLocations() {
+        if (this.state.mode === LandingPageMode.Posts) {
+            return this.state.posts.map(post => post.location);
+        } else if (this.state.mode === LandingPageMode.Challenges) {
+            return this.state.challenges.map(challenge => challenge.location);
+        }
+        return [];
+    }
 
     private onRefreshPress() {
         this.refresh();
@@ -107,13 +145,13 @@ export class LandingPageComponent extends React.Component<any, ILandingPageCompo
         });
     }
 
-    private onHoverOverPost = (index: number) => {
+    private onHoverOverItem = (index: number) => {
         this.setState({
             selectedIndex: index
         });
     };
 
-    private onUnhoverOverPost = (index: number) => {
+    private onUnhoverOverItem = (index: number) => {
         this.setState({
             selectedIndex: this.state.selectedIndex === index ? null : this.state.selectedIndex
         });
@@ -139,35 +177,59 @@ export class LandingPageComponent extends React.Component<any, ILandingPageCompo
     }
 
     private onClickAdd = () => {
-        this.setState({
-            isChoosingPostLocation: !this.state.isChoosingPostLocation
-        });
+        if (this.state.mode === LandingPageMode.Posts) {
+            this.setState({
+                isChoosingPostLocation: !this.state.isChoosingPostLocation,
+                isWritingPost: false,
+                isChoosingChallengeLocation: false,
+                isWritingChallenge: false,
+            });
+        } else if (this.state.mode === LandingPageMode.Challenges) {
+            this.setState({
+                isChoosingChallengeLocation: !this.state.isChoosingChallengeLocation,
+                isWritingChallenge: false,
+                isChoosingPostLocation: false,
+                isWritingPost: false
+            });
+        }
     };
 
     private onChoosePostLocation = (loc: number[]) => {
         this.setState({
             isChoosingPostLocation: false,
             isWritingPost: true,
-            newPostLocation: new GeoPoint(loc[1], loc[0])
+            isChoosingChallengeLocation: false,
+            isWritingChallenge: false,
+            newContentLocation: new GeoPoint(loc[1], loc[0])
         });
     };
 
-    private onSubmitNewPost = (submission: PostSubmission) => {
+    private onChooseChallengeLocation = (loc: number[]) => {
+        this.setState({
+            isChoosingPostLocation: false,
+            isWritingPost: false,
+            isChoosingChallengeLocation: false,
+            isWritingChallenge: true,
+            newContentLocation: new GeoPoint(loc[1], loc[0])
+        });
+    }
+
+    private onSubmitNewPost = (newPost: NewPostInfo) => {
         let newPostRef = db.collection("posts").doc();
         newPostRef.set({
             documentID: newPostRef.id,
-            contentText: submission.contentText,
-            location: submission.location,
+            contentText: newPost.contentText,
+            location: newPost.location,
             timestamp: firebase.firestore.Timestamp.now(),
-            user: submission.user,
-            visibleUsername: submission.visibleUsername
+            user: newPost.user,
+            visibleUsername: newPost.visibleUsername
         })
             .then((docRef) => {
                 console.log("posted");
                 this.setState({
                     isChoosingPostLocation: false,
                     isWritingPost: false,
-                    newPostLocation: null,
+                    newContentLocation: null,
                     endTime: new Date(Date.now() + 5000)
                 }, () => {
                     this.refresh();
@@ -175,11 +237,35 @@ export class LandingPageComponent extends React.Component<any, ILandingPageCompo
             });
     };
 
-    private onCancelWritingPost = () => {
+    private onSubmitNewChallenge = (newChallenge: NewChallengeInfo) => {
+        let newChallengeRef = db.collection("challenges").doc();
+        newChallengeRef.set({
+            documentID: newChallengeRef.id,
+            challengeName: newChallenge.challengeName,
+            challengeText: newChallenge.challengeText,
+            location: newChallenge.location,
+            maxDistance: newChallenge.maxDistance,
+            pictureChallengeEnabled: newChallenge.pictureChallengeEnabled
+        })
+            .then((docRef) => {
+                console.log("created new challenge");
+                this.setState({
+                    isChoosingChallengeLocation: false,
+                    isWritingChallenge: false,
+                    newContentLocation: null,
+                }, () => {
+                    this.refresh();
+                });
+            });
+    }
+
+    private onCancelWritingContent = () => {
         this.setState({
             isChoosingPostLocation: false,
             isWritingPost: false,
-            newPostLocation: null
+            isChoosingChallengeLocation: false,
+            isWritingChallenge: false,
+            newContentLocation: null
         });
     };
 
@@ -206,10 +292,72 @@ export class LandingPageComponent extends React.Component<any, ILandingPageCompo
                     });
                 }
             });
-    }
+    };
+
+    private onPostsModeClick = () => {
+        this.setState({
+            mode: LandingPageMode.Posts
+        });
+    };
+
+    private onChallengesModeClick = () => {
+        this.setState({
+            mode: LandingPageMode.Challenges
+        });
+    };
+
+    private onReportsModeClick = () => {
+        this.setState({
+            mode: LandingPageMode.Reports
+        });
+    };
 
     public render() {
-        let mapContainerElement = document.getElementById("map-container");
+        let feedComponent = (<div/>);
+        let onChooseNewContentLocationFn = this.onChoosePostLocation;
+        let topRightButtonText = this.state.isChoosingPostLocation ? "cancel" : "add post";
+        let mapCenter = null;
+        let mapZoom = null;
+
+        switch (this.state.mode) {
+            case LandingPageMode.Posts:
+                feedComponent = (<PostsFeedComponent
+                    posts={this.state.posts}
+                    onRefreshPress={this.onRefreshPress.bind(this)}
+                    onTimeWindowChange={this.onTimeWindowChange.bind(this)}
+                    isChoosingPostLocation={this.state.isChoosingPostLocation}
+                    isWritingPost={this.state.isWritingPost}
+                    onHoverOverPost={this.onHoverOverItem}
+                    onUnhoverOverPost={this.onUnhoverOverItem}
+                    selectedIndex={this.state.selectedIndex}
+                    onSinglePostQuery={this.onSinglePostQuery}
+                />);
+                onChooseNewContentLocationFn = this.onChoosePostLocation;
+                topRightButtonText = this.state.isChoosingPostLocation ? "cancel" : "add post";
+                if (this.state.onlyOnePost) {
+                    mapCenter = this.state.posts[0].location;
+                    mapZoom = 13;
+                }
+                break;
+            case LandingPageMode.Challenges:
+                feedComponent = (<ChallengesFeedComponent
+                    challenges={this.state.challenges}
+                    onRefreshPress={this.onRefreshPress.bind(this)}
+                    isChoosingChallengeLocation={this.state.isChoosingChallengeLocation}
+                    isWritingChallenge={this.state.isWritingChallenge}
+                    onHoverOverChallenge={this.onHoverOverItem}
+                    onUnhoverOverChallenge={this.onUnhoverOverItem}
+                    selectedIndex={this.state.selectedIndex}
+                />);
+                onChooseNewContentLocationFn = this.onChooseChallengeLocation;
+                topRightButtonText = this.state.isChoosingChallengeLocation ? "cancel" : "add challenge";
+                break;
+            // case LandingPageMode.Reports:
+            //     feedComponent = (<ReportsFeedComponent/>);
+            //     break;
+            default:
+                console.log("didn't recognize mode");
+        }
 
         return (
             <div
@@ -218,48 +366,63 @@ export class LandingPageComponent extends React.Component<any, ILandingPageCompo
                 ]}
             >
                 <div style={[LandingPageComponent.styles.feedContainer]}>
-                    <FeedComponent
-                        posts={this.state.posts}
-                        onRefreshPress={this.onRefreshPress.bind(this)}
-                        onTimeWindowChange={this.onTimeWindowChange.bind(this)}
-                        isChoosingPostLocation={this.state.isChoosingPostLocation}
-                        isWritingPost={this.state.isWritingPost}
-                        onHoverOverPost={this.onHoverOverPost}
-                        onUnhoverOverPost={this.onUnhoverOverPost}
-                        selectedIndex={this.state.selectedIndex}
-                        onSinglePostQuery={this.onSinglePostQuery}
-                    />
+                    <button
+                        onClick={this.onPostsModeClick}
+                    >
+                        posts
+                    </button>
+                    <button
+                        onClick={this.onChallengesModeClick}
+                    >
+                        challenges
+                    </button>
+                    <button
+                        onClick={this.onReportsModeClick}
+                    >
+                        reports
+                    </button>
+                    {feedComponent}
                 </div>
                 <div style={[LandingPageComponent.styles.mapContainer]} id={"map-container"}>
                     <MapComponent
-                        posts={this.state.posts}
+                        locations={this.getMapLocations()}
                         onViewportChange={this.onViewportChange.bind(this)}
-                        isChoosingPostLocation={this.state.isChoosingPostLocation}
-                        isWritingPost={this.state.isWritingPost}
-                        onChoosePostLocation={this.onChoosePostLocation}
+                        isChoosingNewContentLocation={this.state.isChoosingPostLocation || this.state.isChoosingChallengeLocation}
+                        isWritingNewContent={this.state.isWritingPost || this.state.isWritingChallenge}
+                        onChooseNewContentLocation={onChooseNewContentLocationFn}
                         selectedIndex={this.state.selectedIndex}
                         onClickMapMarker={this.onClickMapMarker}
-                        onlyOnePost={this.state.onlyOnePost}
-                        singlePostLat={this.state.posts[0] ? this.state.posts[0].location.latitude : 37.729976}
-                        singlePostLong={this.state.posts[0] ? this.state.posts[0].location.longitude : -122.135260}
+                        withCenter={mapCenter}
+                        withZoom={mapZoom}
                     />
                 </div>
                 <div style={[LandingPageComponent.styles.addButton]}>
                     <button
                         onClick={this.onClickAdd}
                     >
-                        {this.state.isChoosingPostLocation ? "cancel" : "add post"}
+                        {topRightButtonText}
                     </button>
                 </div>
                 <ReactModal
                     isOpen={this.state.isWritingPost}
                     style={ModalStyle}
                     contentLabel="New Post"
-                    onRequestClose={this.onCancelWritingPost}>
+                    onRequestClose={this.onCancelWritingContent}>
                     <NewPostModal
                         onSubmit={this.onSubmitNewPost}
-                        onCancel={this.onCancelWritingPost}
-                        location={this.state.newPostLocation}
+                        onCancel={this.onCancelWritingContent}
+                        location={this.state.newContentLocation}
+                    />
+                </ReactModal>
+                <ReactModal
+                    isOpen={this.state.isWritingChallenge}
+                    style={ModalStyle}
+                    contentLabel="New Challenge"
+                    onRequestClose={this.onCancelWritingContent}>
+                    <NewChallengeModal
+                        onSubmit={this.onSubmitNewChallenge}
+                        onCancel={this.onCancelWritingContent}
+                        location={this.state.newContentLocation}
                     />
                 </ReactModal>
             </div>
@@ -290,6 +453,7 @@ export class LandingPageComponent extends React.Component<any, ILandingPageCompo
 
 export interface ILandingPageComponentState {
     posts: Post[];
+    challenges: Challenge[];
     swCorner: GeoPoint;
     neCorner: GeoPoint;
     startTime?: Date;
@@ -298,8 +462,12 @@ export interface ILandingPageComponentState {
     onlyOnePost: boolean;
     isChoosingPostLocation: boolean;
     isWritingPost: boolean;
-    newPostLocation?: GeoPoint;
+    newContentLocation?: GeoPoint;
+    isChoosingChallengeLocation: boolean;
+    isWritingChallenge: boolean;
+    newChallengeLocation?: GeoPoint;
     selectedIndex?: number;
+    mode: LandingPageMode;
 }
 
 export const ModalStyle = {
@@ -343,3 +511,9 @@ export const ModalStyle = {
         "boxShadow": "0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2)"
     }
 };
+
+enum LandingPageMode {
+    Posts = "posts",
+    Challenges = "challenges",
+    Reports = "reports"
+}
